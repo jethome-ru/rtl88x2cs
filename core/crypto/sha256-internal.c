@@ -23,6 +23,7 @@
  * @mac: Buffer for the hash
  * Returns: 0 on success, -1 of failure
  */
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
 int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
 		  u8 *mac)
 {
@@ -40,7 +41,7 @@ int sha256_vector(size_t num_elem, const u8 *addr[], const size_t *len,
 		return -1;
 	return 0;
 }
-
+#endif
 
 /* ===== start - public domain SHA256 implementation ===== */
 
@@ -82,6 +83,7 @@ static const unsigned long K[64] = {
 #endif
 
 /* compress 512-bits */
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
 static int sha256_compress(struct sha256_state *md, unsigned char *buf)
 {
 	u32 S[8], W[64], t0, t1;
@@ -122,9 +124,10 @@ static int sha256_compress(struct sha256_state *md, unsigned char *buf)
 	}
 	return 0;
 }
-
+#endif
 
 /* Initialize the hash state */
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
 void sha256_init(struct sha256_state *md)
 {
 	md->curlen = 0;
@@ -138,6 +141,7 @@ void sha256_init(struct sha256_state *md)
 	md->state[6] = 0x1F83D9ABUL;
 	md->state[7] = 0x5BE0CD19UL;
 }
+#endif
 
 /**
    Process a block of memory though the hash
@@ -146,6 +150,7 @@ void sha256_init(struct sha256_state *md)
    @param inlen  The length of the data (octets)
    @return CRYPT_OK if successful
 */
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
 int sha256_process(struct sha256_state *md, const unsigned char *in,
 		   unsigned long inlen)
 {
@@ -178,6 +183,7 @@ int sha256_process(struct sha256_state *md, const unsigned char *in,
 
 	return 0;
 }
+#endif
 
 
 /**
@@ -186,6 +192,7 @@ int sha256_process(struct sha256_state *md, const unsigned char *in,
    @param out [out] The destination of the hash (32 bytes)
    @return CRYPT_OK if successful
 */
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
 int sha256_done(struct sha256_state *md, unsigned char *out)
 {
 	int i;
@@ -226,5 +233,6 @@ int sha256_done(struct sha256_state *md, unsigned char *out)
 
 	return 0;
 }
+#endif
 
 /* ===== end - public domain SHA256 implementation ===== */
