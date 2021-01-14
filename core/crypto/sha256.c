@@ -99,8 +99,10 @@ int hmac_sha256_vector(const u8 *key, size_t key_len, size_t num_elem,
  * @mac: Buffer for the hash (32 bytes)
  * Returns: 0 on success, -1 on failure
  */
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0))
 int hmac_sha256(const u8 *key, size_t key_len, const u8 *data,
 		size_t data_len, u8 *mac)
 {
 	return hmac_sha256_vector(key, key_len, 1, &data, &data_len, mac);
 }
+#endif
