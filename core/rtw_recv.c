@@ -4603,9 +4603,13 @@ thread_return rtw_recv_thread(thread_context context)
 	s32 err = _SUCCESS;
 #ifdef RTW_RECV_THREAD_HIGH_PRIORITY
 #ifdef PLATFORM_LINUX
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 9, 1))
 	struct sched_param param = { .sched_priority = 1 };
 
 	sched_setscheduler(current, SCHED_FIFO, &param);
+#else
+	sched_set_fifo_low(current);
+#endif
 #endif /* PLATFORM_LINUX */
 #endif /*RTW_RECV_THREAD_HIGH_PRIORITY*/
 	thread_enter("RTW_RECV_THREAD");
