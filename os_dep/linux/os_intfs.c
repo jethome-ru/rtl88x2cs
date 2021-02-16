@@ -351,7 +351,7 @@ module_param(rtw_rx_path_lmt, int, 0644); /* limit of RX path number, 0: not spe
 module_param(rtw_tx_nss, int, 0644);
 module_param(rtw_rx_nss, int, 0644);
 
-char rtw_country_unspecified[] = {0xFF, 0xFF, 0x00};
+char rtw_country_unspecified[] = {0x41, 0x55, 0x00};
 char *rtw_country_code = rtw_country_unspecified;
 module_param(rtw_country_code, charp, 0644);
 MODULE_PARM_DESC(rtw_country_code, "The default country code (in alpha2)");
