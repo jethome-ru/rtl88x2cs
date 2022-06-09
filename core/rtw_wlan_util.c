@@ -4932,7 +4932,9 @@ int rtw_dev_nlo_info_set(struct pno_nlo_info *nlo_info, pno_ssid_t *ssid,
 
 	int i = 0;
 	struct file *fp;
+#ifdef get_fs
 	mm_segment_t fs;
+#endif
 	loff_t pos = 0;
 	u8 *source = NULL;
 	long len = 0;

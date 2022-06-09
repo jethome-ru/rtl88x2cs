@@ -4265,7 +4265,9 @@ static int route_dump(u32 *gw_addr , int *gw_index)
 	struct msghdr msg;
 	struct iovec iov;
 	struct sockaddr_nl nladdr;
+#ifdef get_fs
 	mm_segment_t oldfs;
+#endif
 	char *pg;
 	int size = 0;
 
