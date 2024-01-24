@@ -4516,7 +4516,7 @@ static int cfg80211_rtw_disconnect(struct wiphy *wiphy, struct net_device *ndev,
 }
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 31))
-static const char *nl80211_tx_power_setting_str(int type)
+static const __attribute__((unused)) char *nl80211_tx_power_setting_str(int type)
 {
 	switch (type) {
 	case NL80211_TX_POWER_AUTOMATIC:
@@ -4591,6 +4591,8 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
 exit:
 	return ret;
 }
+
+
 
 static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
@@ -6406,6 +6408,7 @@ static void rtw_get_chbwoff_from_cfg80211_chan_def(
 	case NL80211_CHAN_WIDTH_20_NOHT:
 		*ht = 0;
 		/* fall through */
+		fallthrough;
 	case NL80211_CHAN_WIDTH_20:
 		*bw = CHANNEL_WIDTH_20;
 		*offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
