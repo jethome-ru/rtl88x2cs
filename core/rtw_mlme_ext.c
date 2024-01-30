@@ -267,6 +267,7 @@ void rtw_txpwr_init_regd(struct rf_ctl_t *rfctl)
 		if (rfctl->regd_name)
 			break;
 		/* else fall through */
+		fallthrough;
 	default:
 		rfctl->regd_name = regd_str(TXPWR_LMT_WW);
 		RTW_PRINT("assign %s for default case\n", regd_str(TXPWR_LMT_WW));
@@ -1378,6 +1379,7 @@ void mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame)
 		else
 			ptable->func = &OnAuthClient;
 	/* fall through */
+		fallthrough;
 	case WIFI_ASSOCREQ:
 	case WIFI_REASSOCREQ:
 		_mgt_dispatcher(padapter, ptable, precv_frame);
@@ -8839,10 +8841,10 @@ static u32 rtw_append_assoc_req_owe_ie(_adapter *adapter, u8 *pbuf)
 	struct security_priv *sec = &adapter->securitypriv;
 	u32 len = 0;
 
-	if (sec == NULL)
+	if (!sec)
 		goto exit;
 
-	if ((sec->owe_ie != NULL) && sec->owe_ie_len > 0) {
+	if (sec->owe_ie_len > 0) {
 		len = sec->owe_ie_len;
 		_rtw_memcpy(pbuf, sec->owe_ie, len);
 	}
