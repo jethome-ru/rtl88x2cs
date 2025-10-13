@@ -1,0 +1,71 @@
+name: Test Build
+
+on:
+  push:
+    branches:
+      - tune_for_jethub
+  pull_request:
+    branches:
+      - tune_for_jethub
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        kernel_version:
+          - 'v6.6'
+          - 'v6.12'
+          - 'v6.17'
+          - 'pre-6.18'
+      fail-fast: false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: tune_for_jethub
+      
+      - name: Setup kernel source
+        run: |
+          echo "Setting up kernel source for version ${{ matrix.kernel_version }}"
+          # Clone or checkout the Linux kernel at the specified tag/version
+          if [ ! -d /tmp/linux-${{ matrix.kernel_version }} ]; then
+            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git /tmp/linux-${{ matrix.kernel_version }} || \
+            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git /tmp/linux-${{ matrix.kernel_version }}
+          fi
+          
+      - name: Prepare kernel build environment
+        run: |
+          cd /tmp/linux-${{ matrix.kernel_version }}
+          # Use existing config or create a minimal config
+          if [ -f /boot/config-$(uname -r) ]; then
+            cp /boot/config-$(uname -r) .config
+          else
+            make defconfig
+          fi
+          # Prepare kernel for module builds
+          make olddefconfig
+          make modules_prepare
+          
+      - name: Build module
+        run: |
+          echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }}"
+          make KSRC=/tmp/linux-${{ matrix.kernel_version }} modules
+        env:
+          ARCH: x86_64
+      
+      - name: Check build artifacts
+        run: |
+          if [ -f 88x2cs.ko ]; then
+            echo "Module 88x2cs.ko built successfully for kernel ${{ matrix.kernel_version }}"
+            ls -lh 88x2cs.ko
+            file 88x2cs.ko
+            modinfo 88x2cs.ko || true
+          else
+            echo "Module build failed - no .ko file found"
+            ls -la *.ko 2>/dev/null || echo "No .ko files found"
+            exit 1
+          fi
+
