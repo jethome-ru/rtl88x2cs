@@ -72,7 +72,8 @@ jobs:
             kmod \
             cpio \
             dwarves \
-            git
+            git \
+            file
       
       - name: Setup kernel source
         run: |
