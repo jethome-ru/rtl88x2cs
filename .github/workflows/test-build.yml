@@ -92,6 +92,11 @@ jobs:
           else
             make defconfig
           fi
+          # Disable certificate-related options that require Ubuntu-specific files
+          scripts/config --disable SYSTEM_TRUSTED_KEYS
+          scripts/config --disable SYSTEM_REVOCATION_KEYS
+          scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
+          scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
           # Prepare kernel for module builds
           make olddefconfig
           make modules_prepare
