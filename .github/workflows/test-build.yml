@@ -100,15 +100,11 @@ jobs:
           # Prepare kernel for module builds
           make olddefconfig
           make modules_prepare
-          # Build kernel modules to generate Module.symvers
-          # This is necessary for external module builds to resolve symbols
-          echo "Building kernel modules to generate Module.symvers..."
-          make -j$(nproc) modules LOCALVERSION=
           
       - name: Build module
         run: |
           echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }}"
-          make KSRC=/tmp/linux-${{ matrix.kernel_version }} modules
+          make KSRC=/tmp/linux-${{ matrix.kernel_version }}
         env:
           ARCH: x86_64
       
