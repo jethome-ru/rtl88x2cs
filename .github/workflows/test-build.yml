@@ -95,6 +95,10 @@ jobs:
           # Prepare kernel for module builds
           make olddefconfig
           make modules_prepare
+          # Build kernel modules to generate Module.symvers
+          # This is necessary for external module builds to resolve symbols
+          echo "Building kernel modules to generate Module.symvers..."
+          make -j$(nproc) modules LOCALVERSION=
           
       - name: Build module
         run: |
