@@ -24,7 +24,6 @@ jobs:
           # Parse JSON and extract versions >= 6.x
           versions=$(python3 << 'EOF'
           import json
-          import sys
           
           with open('/tmp/releases.json', 'r') as f:
               data = json.load(f)
@@ -33,12 +32,9 @@ jobs:
           for release in data.get('releases', []):
               version = release.get('version', '')
               if version and version.startswith('6.'):
-                  # Use moniker if available, otherwise use version
-                  moniker = release.get('moniker', '')
-                  if moniker:
-                      versions.append(moniker)
-                  else:
-                      versions.append('v' + version)
+                  # Add "v" prefix to version to create tag name
+                  tag = 'v' + version
+                  versions.append(tag)
           
           # Create matrix JSON
           matrix = {'kernel_version': versions}
