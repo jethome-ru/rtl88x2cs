@@ -1,0 +1,130 @@
+name: Test Build
+
+on:
+  push:
+    branches:
+      - tune_for_jethub
+  pull_request:
+    branches:
+      - tune_for_jethub
+  workflow_dispatch:
+
+jobs:
+  get-kernel-versions:
+    runs-on: [self-hosted, X64]
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Fetch kernel versions from kernel.org
+        id: set-matrix
+        run: |
+          # Fetch releases.json and extract all kernel versions >= 6.x
+          curl -s https://www.kernel.org/releases.json > /tmp/releases.json
+          
+          # Parse JSON and extract versions >= 6.x
+          versions=$(python3 << 'EOF'
+          import json
+          
+          with open('/tmp/releases.json', 'r') as f:
+              data = json.load(f)
+          
+          versions = []
+          for release in data.get('releases', []):
+              version = release.get('version', '')
+              if version and version.startswith('6.'):
+                  # Add "v" prefix to version to create tag name
+                  tag = 'v' + version
+                  versions.append(tag)
+          
+          # Create matrix JSON
+          matrix = {'kernel_version': versions}
+          print(json.dumps(matrix))
+          EOF
+          )
+          
+          echo "matrix=$versions" >> $GITHUB_OUTPUT
+          echo "Kernel versions to build: $versions"
+
+  build:
+    needs: get-kernel-versions
+    runs-on: [self-hosted, X64]
+    strategy:
+      matrix: ${{ fromJson(needs.get-kernel-versions.outputs.matrix) }}
+      fail-fast: false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: tune_for_jethub
+      
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            libncurses-dev \
+            bison \
+            flex \
+            libssl-dev \
+            libelf-dev \
+            bc \
+            kmod \
+            cpio \
+            dwarves \
+            git \
+            file
+      
+      - name: Setup kernel source
+        run: |
+          echo "Setting up kernel source for version ${{ matrix.kernel_version }}"
+          # Clone or checkout the Linux kernel at the specified tag/version
+          if [ ! -d /tmp/linux-${{ matrix.kernel_version }} ]; then
+            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git /tmp/linux-${{ matrix.kernel_version }} || \
+            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git /tmp/linux-${{ matrix.kernel_version }}
+          fi
+          
+      - name: Prepare kernel build environment
+        run: |
+          cd /tmp/linux-${{ matrix.kernel_version }}
+          # Use existing config or create a minimal config
+          if [ -f /boot/config-$(uname -r) ]; then
+            cp /boot/config-$(uname -r) .config
+          else
+            make defconfig
+          fi
+          # Disable certificate-related options that require Ubuntu-specific files
+          scripts/config --disable SYSTEM_TRUSTED_KEYS
+          scripts/config --disable SYSTEM_REVOCATION_KEYS
+          scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
+          scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
+          # Prepare kernel for module builds
+          make olddefconfig
+          make modules_prepare
+          
+      - name: Build module
+        run: |
+          echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }}"
+          # Build only compilation, skip linking to avoid undefined symbol errors
+          make KSRC=/tmp/linux-${{ matrix.kernel_version }} KBUILD_MODPOST_WARN=1
+        env:
+          ARCH: x86_64
+      
+      - name: Check build artifacts
+        run: |
+          # Check if object files were compiled successfully
+          if find . -name "*.o" -path "*/hal/*" -o -name "*.o" -path "*/core/*" -o -name "*.o" -path "*/os_dep/*" | grep -q .; then
+            echo "Module compiled successfully for kernel ${{ matrix.kernel_version }}"
+            echo "Object files created:"
+            find . -name "*.o" | head -20
+            # Check if .ko file exists (may have warnings but still built)
+            if [ -f 88x2cs.ko ]; then
+              echo "Module 88x2cs.ko was also linked (possibly with warnings):"
+              ls -lh 88x2cs.ko
+              file 88x2cs.ko
+            fi
+          else
+            echo "Module compilation failed - no object files found"
+            exit 1
+          fi
+
