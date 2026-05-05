@@ -1935,7 +1935,11 @@ static int cfg80211_rtw_add_key(struct wiphy *wiphy,
 	, const u8 *mac_addr, struct key_params *params)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 	char *alg_name;
 	u32 param_len;
@@ -2110,7 +2114,11 @@ static int cfg80211_rtw_get_key(struct wiphy *wiphy,
 	, void (*callback)(void *cookie, struct key_params *))
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 #define GET_KEY_PARAM_FMT_S " keyid=%d"
 #define GET_KEY_PARAM_ARG_S , keyid
@@ -2309,7 +2317,11 @@ static int cfg80211_rtw_del_key(struct wiphy *wiphy,
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) */
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
 	struct security_priv *psecuritypriv = &padapter->securitypriv;
@@ -2389,7 +2401,11 @@ int cfg80211_rtw_set_default_mgmt_key(struct wiphy *wiphy,
 	, u8 key_index)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 #define SET_DEF_KEY_PARAM_FMT " key_index=%d"
 #define SET_DEF_KEY_PARAM_ARG , key_index
@@ -2549,7 +2565,11 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 	struct station_info *sinfo)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 	int ret = 0;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
@@ -5881,7 +5901,11 @@ static int	cfg80211_rtw_add_station(struct wiphy *wiphy,
 	struct station_parameters *params)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 	int ret = 0;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(ndev);
@@ -6065,7 +6089,11 @@ static int	cfg80211_rtw_del_station(struct wiphy *wiphy,
 )
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 	int ret = 0;
 	_irqL irqL;
@@ -6196,7 +6224,11 @@ static int	cfg80211_rtw_change_station(struct wiphy *wiphy,
 	struct station_parameters *params)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(ndev);
 	int ret = 0;
@@ -6266,7 +6298,11 @@ static int	cfg80211_rtw_dump_station(struct wiphy *wiphy,
 		int idx, u8 *mac, struct station_info *sinfo)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
-	struct net_device *ndev = wdev->netdev;
+	/* P2P device wdev (NL80211_IFTYPE_P2P_DEVICE) has no netdev */
+	struct net_device *ndev = wdev_to_ndev(wdev);
+
+	if (!ndev)
+		return -EINVAL;
 #endif
 #define DBG_DUMP_STATION 0
 
