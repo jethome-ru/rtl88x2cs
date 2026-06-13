@@ -19,6 +19,7 @@
 #include <aes_wrap.h>
 #include <sha256.h>
 #include <wlancrypto_wrap.h>
+#include "rtw_swcrypto.h"
 
 /**
  * rtw_ccmp_encrypt - 

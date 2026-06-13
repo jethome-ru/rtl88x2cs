@@ -671,7 +671,7 @@ void phydm_dfs_parameter_init(void *dm_void)
 	dfs->type4_safe_pri_sum_th = 5;
 }
 
-void phydm_dfs_dynamic_setting(
+static void phydm_dfs_dynamic_setting(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -821,7 +821,7 @@ void phydm_dfs_dynamic_setting(
 	dfs->three_peak_th2 = three_peak_th2_cur;
 }
 
-boolean
+static boolean
 phydm_radar_detect_dm_check(
 	void *dm_void)
 {

@@ -460,6 +460,10 @@ void rtw_btcoex_LPS_Enter(PADAPTER padapter);
 u8 rtw_btcoex_LPS_Leave(PADAPTER padapter);
 
 #endif /* __RTW_BTCOEX_H__ */
+
+/* -Wmissing-prototypes: cross-file declarations */
+void rtw_btcoex_SetHciVersion(PADAPTER padapter, u16 hciVersion);
+
 #endif /* CONFIG_BT_COEXIST */
 
 void rtw_btcoex_set_ant_info(PADAPTER padapter);

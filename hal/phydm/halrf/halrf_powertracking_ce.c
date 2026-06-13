@@ -30,6 +30,7 @@
 
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
+#include "halrf_powertracking_ce.h"
 
 /*@************************************************************
  * Global var

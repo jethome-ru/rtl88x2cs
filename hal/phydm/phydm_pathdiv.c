@@ -597,7 +597,7 @@ void phydm_path_diversity_init_8812a(void *dm_void)
 #endif
 
 #ifdef PHYDM_IC_JGR3_SERIES_SUPPORT
-void phydm_set_resp_tx_path_by_fw_jgr3(void *dm_void, u8 macid,
+static void phydm_set_resp_tx_path_by_fw_jgr3(void *dm_void, u8 macid,
 				       enum bb_path path, boolean enable)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -668,7 +668,7 @@ void phydm_get_tx_path_txdesc_jgr3(void *dm_void, u8 macid,
 }
 #endif
 
-void phydm_tx_path_by_mac_or_reg(void *dm_void, enum phydm_path_ctrl ctrl)
+static void phydm_tx_path_by_mac_or_reg(void *dm_void, enum phydm_path_ctrl ctrl)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct _ODM_PATH_DIVERSITY_ *p_div = &dm->dm_path_div;
@@ -714,7 +714,7 @@ void phydm_tx_path_by_mac_or_reg(void *dm_void, enum phydm_path_ctrl ctrl)
 	}
 }
 
-void phydm_fix_1ss_tx_path_by_bb_reg(void *dm_void,
+static void phydm_fix_1ss_tx_path_by_bb_reg(void *dm_void,
 				     enum bb_path tx_path_sel_1ss,
 				     enum bb_path tx_path_sel_cck)
 {
@@ -816,7 +816,7 @@ void phydm_set_tx_path_by_bb_reg(void *dm_void, enum bb_path tx_path_sel_1ss)
 	}
 }
 
-void phydm_tx_path_diversity_2ss(void *dm_void)
+static void phydm_tx_path_diversity_2ss(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct _ODM_PATH_DIVERSITY_ *p_div = &dm->dm_path_div;
@@ -947,7 +947,7 @@ void phydm_tx_path_diversity(void *dm_void)
 	}
 }
 
-void phydm_tx_path_diversity_init_v2(void *dm_void)
+static void phydm_tx_path_diversity_init_v2(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct _ODM_PATH_DIVERSITY_ *p_div = &dm->dm_path_div;

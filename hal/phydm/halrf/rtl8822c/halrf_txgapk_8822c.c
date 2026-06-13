@@ -36,7 +36,7 @@
 
 #if (RTL8822C_SUPPORT == 1)
 
-void _halrf_txgapk_backup_bb_registers_8822c(
+static void _halrf_txgapk_backup_bb_registers_8822c(
 	void *dm_void,
 	u32 *reg,
 	u32 *reg_backup,
@@ -53,7 +53,7 @@ void _halrf_txgapk_backup_bb_registers_8822c(
 	}
 }
 
-void _halrf_txgapk_reload_bb_registers_8822c(
+static void _halrf_txgapk_reload_bb_registers_8822c(
 	void *dm_void,
 	u32 *reg,
 	u32 *reg_backup,
@@ -70,7 +70,7 @@ void _halrf_txgapk_reload_bb_registers_8822c(
 	}
 }
 
-void _halrf_txgapk_bb_dpk_8822c(
+static void _halrf_txgapk_bb_dpk_8822c(
 	void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -100,7 +100,7 @@ void _halrf_txgapk_bb_dpk_8822c(
 	odm_set_bb_reg(dm, R_0x1a00, 0x00000003, 0x2);
 }
 
-void _halrf_txgapk_afe_dpk_8822c(
+static void _halrf_txgapk_afe_dpk_8822c(
 	void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -150,7 +150,7 @@ void _halrf_txgapk_afe_dpk_8822c(
 	}
 }
 
-void _halrf_txgapk_afe_dpk_restore_8822c(
+static void _halrf_txgapk_afe_dpk_restore_8822c(
 	void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -196,7 +196,7 @@ void _halrf_txgapk_afe_dpk_restore_8822c(
 	}
 }
 
-void _halrf_txgapk_bb_dpk_restore_8822c(
+static void _halrf_txgapk_bb_dpk_restore_8822c(
 	void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -240,7 +240,7 @@ void _halrf_txgapk_bb_dpk_restore_8822c(
 
 }
 
-void _halrf_txgapk_write_gain_bb_table_8822c(
+static void _halrf_txgapk_write_gain_bb_table_8822c(
 	void *dm_void)
 {
 #if 0
@@ -329,7 +329,7 @@ void _halrf_txgapk_write_gain_bb_table_8822c(
 #endif
 }
 
-void _halrf_txgapk_calculate_offset_8822c(
+static void _halrf_txgapk_calculate_offset_8822c(
 	void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -513,7 +513,7 @@ void _halrf_txgapk_calculate_offset_8822c(
 	_halrf_txgapk_reload_bb_registers_8822c(dm, bb_reg, bb_reg_backup, backup_num);
 }
 
-void _halrf_txgapk_rf_restore_8822c(
+static void _halrf_txgapk_rf_restore_8822c(
 	void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -533,7 +533,7 @@ void _halrf_txgapk_rf_restore_8822c(
 	}
 }
 
-u32 _halrf_txgapk_calculat_tx_gain_8822c(
+static u32 _halrf_txgapk_calculat_tx_gain_8822c(
 	void *dm_void, u32 original_tx_gain, s8 offset)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -570,7 +570,7 @@ u32 _halrf_txgapk_calculat_tx_gain_8822c(
 	return modify_tx_gain;
 }
 
-void _halrf_txgapk_write_tx_gain_8822c(
+static void _halrf_txgapk_write_tx_gain_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -657,7 +657,7 @@ void _halrf_txgapk_write_tx_gain_8822c(
 	}
 }
 
-void _halrf_txgapk_disable_power_trim_8822c(
+static void _halrf_txgapk_disable_power_trim_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -672,7 +672,7 @@ void _halrf_txgapk_disable_power_trim_8822c(
 
 }
 
-void _halrf_txgapk_enable_power_trim_8822c(
+static void _halrf_txgapk_enable_power_trim_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;

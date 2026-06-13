@@ -14,6 +14,7 @@
  *****************************************************************************/
 #include <drv_types.h>
 #include <hal_data.h>
+#include "rtw_btcoex.h"
 #ifdef CONFIG_BT_COEXIST
 #include <hal_btcoex.h>
 

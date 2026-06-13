@@ -24,6 +24,7 @@
  *****************************************************************************/
 
 #include "mp_precomp.h"
+#include "halrf_dpk_8822c.h"
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 #if RT_PLATFORM == PLATFORM_MACOSX
 #include "phydm_precomp.h"
@@ -152,7 +153,7 @@ void btc_set_gnt_wl_bt_8822c(
 	}
 }
 
-void _backup_mac_bb_registers_8822c(
+static void _backup_mac_bb_registers_8822c(
 	struct dm_struct *dm,
 	u32 *reg,
 	u32 *reg_backup,
@@ -169,7 +170,7 @@ void _backup_mac_bb_registers_8822c(
 	}
 }
 
-void _backup_rf_registers_8822c(
+static void _backup_rf_registers_8822c(
 	struct dm_struct *dm,
 	u32 *rf_reg,
 	u32 rf_reg_backup[][2])
@@ -190,7 +191,7 @@ void _backup_rf_registers_8822c(
 	}
 }
 
-void _reload_mac_bb_registers_8822c(
+static void _reload_mac_bb_registers_8822c(
 	struct dm_struct *dm,
 	u32 *reg,
 	u32 *reg_backup,
@@ -215,7 +216,7 @@ void _reload_mac_bb_registers_8822c(
 	odm_set_bb_reg(dm, R_0x1bd4, 0x000000f0, 0x4); /*force CLK off for power saving*/
 }
 
-void _reload_rf_registers_8822c(
+static void _reload_rf_registers_8822c(
 	struct dm_struct *dm,
 	u32 *rf_reg,
 	u32 rf_reg_backup[][2])
@@ -245,7 +246,7 @@ void _reload_rf_registers_8822c(
 #endif
 }
 
-void _dpk_information_8822c(
+static void _dpk_information_8822c(
 	struct dm_struct *dm)
 {
 	struct dm_dpk_info *dpk_info = &dm->dpk_info;
@@ -269,7 +270,7 @@ void _dpk_information_8822c(
 	       dpk_info->dpk_bw == 3 ? "20M" : (dpk_info->dpk_bw == 2 ? "40M" : "80M"));
 }
 
-void _dpk_rxbb_dc_cal_8822c(
+static void _dpk_rxbb_dc_cal_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -283,7 +284,7 @@ void _dpk_rxbb_dc_cal_8822c(
 	odm_set_rf_reg(dm, (enum rf_path)path, 0x92, RFREG_MASK, 0x84800);
 }
 
-u8 _dpk_dc_corr_check_8822c(
+static u8 _dpk_dc_corr_check_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -323,7 +324,7 @@ u8 _dpk_dc_corr_check_8822c(
 
 }
 
-void _dpk_tx_pause_8822c(
+static void _dpk_tx_pause_8822c(
 	struct dm_struct *dm)
 {
 	u8 reg_rf0_a, reg_rf0_b;
@@ -345,7 +346,7 @@ void _dpk_tx_pause_8822c(
 	RF_DBG(dm, DBG_RF_DPK, "[DPK] Tx pause!!\n");
 }
 
-void _dpk_mac_bb_setting_8822c(
+static void _dpk_mac_bb_setting_8822c(
 	struct dm_struct *dm)
 {
 	struct dm_dpk_info *dpk_info = &dm->dpk_info;
@@ -386,7 +387,7 @@ void _dpk_mac_bb_setting_8822c(
 	RF_DBG(dm, DBG_RF_DPK, "[DPK] MAC/BB setting for DPK mode\n");
 }
 
-void _dpk_manual_txagc_8822c(
+static void _dpk_manual_txagc_8822c(
 	struct dm_struct *dm,
 	boolean is_manual)
 {
@@ -394,7 +395,7 @@ void _dpk_manual_txagc_8822c(
 	odm_set_bb_reg(dm, R_0x41a4, BIT(7), is_manual);
 }
 
-void _dpk_set_txagc_8822c(
+static void _dpk_set_txagc_8822c(
 	struct dm_struct *dm)
 {
 	odm_set_bb_reg(dm, R_0x18a0, 0x007C0000, 0x1f);
@@ -403,7 +404,7 @@ void _dpk_set_txagc_8822c(
 	odm_set_bb_reg(dm, 0x41e8, 0x0001F000, 0x1f);
 }
 
-void _dpk_afe_setting_8822c(
+static void _dpk_afe_setting_8822c(
 	struct dm_struct *dm,
 	boolean is_do_dpk)
 {
@@ -519,7 +520,7 @@ void _dpk_afe_setting_8822c(
 	}
 }
 
-void _dpk_pre_setting_8822c(
+static void _dpk_pre_setting_8822c(
 	struct dm_struct *dm)
 {
 	struct dm_dpk_info *dpk_info = &dm->dpk_info;
@@ -543,7 +544,7 @@ void _dpk_pre_setting_8822c(
 	odm_set_bb_reg(dm, R_0x1be8, MASKDWORD, 0x775f5347);
 }
 
-u32 _dpk_rf_setting_8822c(
+static u32 _dpk_rf_setting_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -658,7 +659,7 @@ u32 _dpk_rf_setting_8822c(
 	return ori_txbb & 0x1f;
 }
 
-u8 _dpk_one_shot_8822c(
+static u8 _dpk_one_shot_8822c(
 	struct dm_struct *dm,
 	u8 path,
 	u8 action)
@@ -731,7 +732,7 @@ u8 _dpk_one_shot_8822c(
 	return result;
 }
 
-u16 _dpk_dgain_read_8822c(
+static u16 _dpk_dgain_read_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -747,7 +748,7 @@ u16 _dpk_dgain_read_8822c(
 	return dgain;
 }
 
-u8 _dpk_thermal_read_8822c(
+static u8 _dpk_thermal_read_8822c(
 	void *dm_void,
 	u8 path)
 {
@@ -762,7 +763,7 @@ u8 _dpk_thermal_read_8822c(
 	return (u8)odm_get_rf_reg(dm, (enum rf_path)path, RF_0x42, 0x0007e);
 }
 
-u32 _dpk_pas_read_8822c(
+static u32 _dpk_pas_read_8822c(
 	struct dm_struct *dm,
 	u8 path,
 	u8 action)
@@ -818,7 +819,7 @@ u32 _dpk_pas_read_8822c(
 	return i_val*i_val + q_val*q_val;
 }
 
-u8 _dpk_gainloss_result_8822c(
+static u8 _dpk_gainloss_result_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -836,7 +837,7 @@ u8 _dpk_gainloss_result_8822c(
 	return result;
 }
 
-u8 _dpk_agc_chk_8822c(
+static u8 _dpk_agc_chk_8822c(
 	struct dm_struct *dm,
 	u8 path,
 	u8 limited_pga,
@@ -891,7 +892,7 @@ u8 _dpk_agc_chk_8822c(
 
 }
 
-u8 _dpk_pas_agc_8822c(
+static u8 _dpk_pas_agc_8822c(
 	struct dm_struct *dm,
 	u8 path,
 	u8 gain_only,
@@ -1017,7 +1018,7 @@ u8 _dpk_pas_agc_8822c(
 	return tmp_txbb;
 }
 
-boolean _dpk_coef_iq_check_8822c(
+static boolean _dpk_coef_iq_check_8822c(
 	struct dm_struct *dm,
 	u16 coef_i,
 	u16 coef_q)
@@ -1029,7 +1030,7 @@ boolean _dpk_coef_iq_check_8822c(
 		return 0;
 }
 
-u32 _dpk_coef_transfer_8822c(
+static u32 _dpk_coef_transfer_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -1116,7 +1117,7 @@ void _dpk_get_coef_8822c(
 
 }
 
-u8 _dpk_coef_read_8822c(
+static u8 _dpk_coef_read_8822c(
 	void *dm_void,
 	u8 path)
 {
@@ -1138,7 +1139,7 @@ u8 _dpk_coef_read_8822c(
 	return result;
 }
 
-void _dpk_coef_write_8822c(
+static void _dpk_coef_write_8822c(
 	void *dm_void,
 	u8 path,
 	u8 result)
@@ -1175,7 +1176,7 @@ void _dpk_coef_write_8822c(
 	}
 }
 
-void _dpk_coef1_read_8822c(
+static void _dpk_coef1_read_8822c(
 	void *dm_void,
 	u8 path)
 {
@@ -1248,7 +1249,7 @@ void _dpk_coef1_read_8822c(
 	odm_set_bb_reg(dm, 0x1b04 + path * 0x58, 0xf0000000, 0x0); /*disable manual coef*/
 }
 
-void _dpk_coef_default_8822c(
+static void _dpk_coef_default_8822c(
 	void *dm_void,
 	u8 path)
 {
@@ -1278,7 +1279,7 @@ void _dpk_coef_default_8822c(
 	}
 }
 
-void _dpk_fill_result_8822c(
+static void _dpk_fill_result_8822c(
 	void *dm_void,
 	u32 dpk_txagc,
 	u8 path,
@@ -1303,7 +1304,7 @@ void _dpk_fill_result_8822c(
 	_dpk_coef_write_8822c(dm, path, result);
 }
 
-u32 _dpk_gainloss_8822c(
+static u32 _dpk_gainloss_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -1368,7 +1369,7 @@ u32 _dpk_gainloss_8822c(
 	return tx_agc;
 }
 
-u8 _dpk_by_path_8822c(
+static u8 _dpk_by_path_8822c(
 	struct dm_struct *dm,
 	u32 tx_agc,
 	u8 path)
@@ -1422,7 +1423,7 @@ u8 _dpk_by_path_8822c(
 	return result;
 }
 
-void _dpk_cal_gs_8822c(
+static void _dpk_cal_gs_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -1507,7 +1508,7 @@ void _dpk_cal_gs_8822c(
 
 }
 
-void _dpk_cal_coef1_8822c(
+static void _dpk_cal_coef1_8822c(
 	struct dm_struct *dm)
 {
 	struct dm_dpk_info *dpk_info = &dm->dpk_info;
@@ -1559,7 +1560,7 @@ void _dpk_cal_coef1_8822c(
 	}
  }
 
-void _dpk_on_8822c(
+static void _dpk_on_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -1595,7 +1596,7 @@ void dpk_coef_read_8822c(
 	RF_DBG(dm, DBG_RF_DPK, "[DPK] ========= Coef Read Finish =========\n");
 }
 
-u8 _dpk_check_fail_8822c(
+static u8 _dpk_check_fail_8822c(
 	struct dm_struct *dm,
 	boolean is_fail,
 	u32 dpk_txagc,
@@ -1617,7 +1618,7 @@ u8 _dpk_check_fail_8822c(
 	return result;
 }
 
-void _dpk_result_reset_8822c(
+static void _dpk_result_reset_8822c(
 	struct dm_struct *dm)
 {
 	struct dm_dpk_info *dpk_info = &dm->dpk_info;
@@ -1648,7 +1649,7 @@ void _dpk_result_reset_8822c(
 	}
 }
 
-void _dpk_calibrate_8822c(
+static void _dpk_calibrate_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -1679,7 +1680,7 @@ void _dpk_calibrate_8822c(
 
 }
 
-void _dpk_path_select_8822c(
+static void _dpk_path_select_8822c(
 	struct dm_struct *dm)
 {
 	struct dm_dpk_info *dpk_info = &dm->dpk_info;
@@ -1697,7 +1698,7 @@ void _dpk_path_select_8822c(
 	_dpk_cal_coef1_8822c(dm);
 }
 
-void _dpk_result_summary_8822c(
+static void _dpk_result_summary_8822c(
 	struct dm_struct *dm)
 {
 	struct dm_dpk_info *dpk_info = &dm->dpk_info;
@@ -1726,7 +1727,7 @@ void _dpk_result_summary_8822c(
 
 }
 
-void _dpk_reload_data_8822c(
+static void _dpk_reload_data_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -1783,7 +1784,7 @@ u8 dpk_reload_8822c(
 	return dpk_info->is_reload;
 }
 
-void _dpk_by_fw_8822c(
+static void _dpk_by_fw_8822c(
 	struct dm_struct *dm)
 {
 	enum hal_status status = HAL_STATUS_FAILURE;
@@ -1798,7 +1799,7 @@ void _dpk_by_fw_8822c(
 		RF_DBG(dm, DBG_RF_DPK, "[DPK] FW DPK Trigger Fail!!!\n");
 }
 
-void _dpk_force_bypass_8822c(
+static void _dpk_force_bypass_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -1814,7 +1815,7 @@ void _dpk_force_bypass_8822c(
 	RF_DBG(dm, DBG_RF_DPK, "[DPK] S1 DPK bypass !!!\n");
 }
 
-void _rx_dc_cal_8822c(
+static void _rx_dc_cal_8822c(
 	struct dm_struct *dm)
 {
 	u32 bb_reg_backup[7];

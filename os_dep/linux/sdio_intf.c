@@ -17,6 +17,7 @@
 #include <drv_types.h>
 #include <hal_data.h>
 #include <platform_ops.h>
+#include "osdep_intf.h"
 
 #ifndef CONFIG_SDIO_HCI
 #error "CONFIG_SDIO_HCI shall be on!\n"
@@ -800,7 +801,7 @@ static void sd_intf_stop(PADAPTER padapter)
 PADAPTER g_test_adapter = NULL;
 #endif /* RTW_SUPPORT_PLATFORM_SHUTDOWN */
 
-_adapter *rtw_sdio_primary_adapter_init(struct dvobj_priv *dvobj)
+static _adapter *rtw_sdio_primary_adapter_init(struct dvobj_priv *dvobj)
 {
 	int status = _FAIL;
 	PADAPTER padapter = NULL;

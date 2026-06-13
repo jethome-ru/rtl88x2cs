@@ -366,7 +366,7 @@ void hal_mpt_SetBandwidth(PADAPTER pAdapter)
 
 }
 
-void mpt_SetTxPower_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPower)
+static void mpt_SetTxPower_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPower)
 {
 	switch (Rate) {
 	case MPT_CCK: {
@@ -423,7 +423,7 @@ void mpt_SetTxPower_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPower)
 	RTW_INFO("<===mpt_SetTxPower_Old()\n");
 }
 
-void
+static void
 mpt_SetTxPower(
 	PADAPTER		pAdapter,
 	MPT_TXPWR_DEF	Rate,
@@ -861,7 +861,7 @@ void mpt_SetRFPath_8814A(PADAPTER	pAdapter)
 
 #endif /* CONFIG_RTL8814A */
 #if defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)  || defined(CONFIG_RTL8822C) || defined(CONFIG_RTL8814B)
-void
+static void
 mpt_SetSingleTone_8814A(
 		PADAPTER	pAdapter,
 		BOOLEAN	bSingleTone,
@@ -1290,7 +1290,7 @@ void mpt_SetRFPath_8723D(PADAPTER pAdapter)
 }
 #endif
 
-void mpt_SetRFPath_819X(PADAPTER	pAdapter)
+static void mpt_SetRFPath_819X(PADAPTER	pAdapter)
 {
 	HAL_DATA_TYPE			*pHalData	= GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);

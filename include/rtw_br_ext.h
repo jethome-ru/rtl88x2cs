@@ -66,4 +66,24 @@ struct br_ext_info {
 
 void nat25_db_cleanup(_adapter *priv);
 
+
+/* -Wmissing-prototypes: cross-file declarations */
+int nat25_handle_frame(_adapter *priv, struct sk_buff *skb);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+void nat25_db_expire(_adapter *priv);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+int nat25_db_handle(_adapter *priv, struct sk_buff *skb, int method);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+void dhcp_flag_bcast(_adapter *priv, struct sk_buff *skb);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+void *scdb_findEntry(_adapter *priv, unsigned char *macAddr, unsigned char *ipAddr);
+
 #endif /* _RTW_BR_EXT_H_ */

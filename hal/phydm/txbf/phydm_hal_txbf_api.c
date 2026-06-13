@@ -461,7 +461,7 @@ void phydm_txbf_rfmode(void *dm_void, u8 su_bfee_cnt, u8 mu_bfee_cnt)
 #endif
 }
 
-void phydm_mu_rsoml_reset(void *dm_void)
+static void phydm_mu_rsoml_reset(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_bf_rate_info_jgr3 *rateinfo = &dm->bf_rate_info_jgr3;

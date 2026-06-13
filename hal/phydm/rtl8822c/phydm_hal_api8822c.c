@@ -90,7 +90,7 @@ void phydm_txagc_tab_buff_show_8822c(struct dm_struct *dm)
 #endif
 
 __odm_func__
-void phydm_bb_reset_8822c(struct dm_struct *dm)
+static void phydm_bb_reset_8822c(struct dm_struct *dm)
 {
 	if (*dm->mp_mode) 
 		return;
@@ -101,7 +101,7 @@ void phydm_bb_reset_8822c(struct dm_struct *dm)
 }
 
 __odm_func__
-void phydm_bb_reset_no_3wires_8822c(struct dm_struct *dm)
+static void phydm_bb_reset_no_3wires_8822c(struct dm_struct *dm)
 {
 	/* Disable bbrstb 3-wires */
 	odm_set_bb_reg(dm, R_0x1c90, BIT(8), 0x0);
@@ -137,7 +137,7 @@ boolean phydm_chk_pkg_set_valid_8822c(struct dm_struct *dm,
 }
 
 __odm_func__
-void phydm_igi_toggle_8822c(struct dm_struct *dm)
+static void phydm_igi_toggle_8822c(struct dm_struct *dm)
 {
 /*
  * @Toggle IGI to force BB HW send 3-wire-cmd and will let RF HW enter RX mode.
@@ -155,7 +155,7 @@ void phydm_igi_toggle_8822c(struct dm_struct *dm)
 }
 
 __odm_func__
-u32 phydm_check_bit_mask_8822c(u32 bit_mask, u32 data_original, u32 data)
+static u32 phydm_check_bit_mask_8822c(u32 bit_mask, u32 data_original, u32 data)
 {
 	u8 bit_shift = 0;
 
@@ -201,7 +201,7 @@ u32 config_phydm_read_rf_reg_8822c(struct dm_struct *dm, enum rf_path path,
 }
 
 __odm_func__
-boolean
+static boolean
 config_phydm_direct_write_rf_reg_8822c(struct dm_struct *dm, enum rf_path path,
 				       u32 reg_addr, u32 bit_mask, u32 data)
 {
@@ -898,7 +898,7 @@ phydm_get_rx_path_en_setting_8822c(struct dm_struct *dm,
 }
 
 __odm_func__
-void
+static void
 phydm_config_cck_tx_path_8822c(struct dm_struct *dm, enum bb_path tx_path)
 {
 	if (tx_path == BB_PATH_A)
@@ -912,7 +912,7 @@ phydm_config_cck_tx_path_8822c(struct dm_struct *dm, enum bb_path tx_path)
 }
 
 __odm_func__
-boolean
+static boolean
 phydm_config_cck_rx_path_8822c(struct dm_struct *dm, enum bb_path rx_path)
 {
 	boolean set_result = PHYDM_SET_FAIL;
@@ -960,7 +960,7 @@ phydm_config_cck_rx_path_8822c(struct dm_struct *dm, enum bb_path rx_path)
 }
 
 __odm_func__
-void
+static void
 phydm_config_ofdm_tx_path_8822c(struct dm_struct *dm, enum bb_path tx_path_2ss,
 				enum bb_path tx_path_sel_1ss)
 {
@@ -994,7 +994,7 @@ phydm_config_ofdm_tx_path_8822c(struct dm_struct *dm, enum bb_path tx_path_2ss,
 }
 
 __odm_func__
-void
+static void
 phydm_config_ofdm_rx_path_8822c(struct dm_struct *dm, enum bb_path rx_path)
 {
 	u32 ofdm_rx = 0x0;
@@ -1073,7 +1073,7 @@ void phydm_config_tx_path_8822c(struct dm_struct *dm, enum bb_path tx_path_2ss,
 }
 
 __odm_func__
-void phydm_config_rx_path_8822c(struct dm_struct *dm, enum bb_path rx_path)
+static void phydm_config_rx_path_8822c(struct dm_struct *dm, enum bb_path rx_path)
 {
 	/* @CCK RX antenna mapping */
 	phydm_config_cck_rx_path_8822c(dm, rx_path);
@@ -1087,7 +1087,7 @@ void phydm_config_rx_path_8822c(struct dm_struct *dm, enum bb_path rx_path)
 }
 
 __odm_func__
-void
+static void
 phydm_set_rf_mode_table_8822c(struct dm_struct *dm,
 			      enum bb_path tx_path_mode_table,
 			      enum bb_path rx_path)
@@ -1125,7 +1125,7 @@ phydm_set_rf_mode_table_8822c(struct dm_struct *dm,
 }
 
 __odm_func__
-void
+static void
 phydm_rfe_8822c(struct dm_struct *dm, enum bb_path path)
 {
 	u8 rfe_type = dm->rfe_type;
@@ -1280,7 +1280,7 @@ config_phydm_trx_mode_8822c(struct dm_struct *dm, enum bb_path tx_path_en,
 	return true;
 }
 
-void phydm_cck_rxiq_8822c(struct dm_struct *dm, u8 set_type)
+static void phydm_cck_rxiq_8822c(struct dm_struct *dm, u8 set_type)
 {
 	PHYDM_DBG(dm, ODM_PHY_CONFIG, "%s ======>\n", __func__);
 
@@ -1305,7 +1305,7 @@ config_phydm_switch_band_8822c(struct dm_struct *dm, u8 central_ch)
 }
 
 __odm_func__
-void
+static void
 phydm_cck_tx_shaping_filter_8822c(struct dm_struct *dm, u8 central_ch)
 {
 	/* @CCK TX filter parameters */
@@ -1347,7 +1347,7 @@ phydm_cck_tx_shaping_filter_8822c(struct dm_struct *dm, u8 central_ch)
 }
 
 __odm_func__
-void
+static void
 phydm_cck_agc_tab_sel_8822c(struct dm_struct *dm, u8 table)
 {
 	odm_set_bb_reg(dm, R_0x18ac, 0xf000, table);
@@ -1355,7 +1355,7 @@ phydm_cck_agc_tab_sel_8822c(struct dm_struct *dm, u8 table)
 }
 
 __odm_func__
-void
+static void
 phydm_ofdm_agc_tab_sel_8822c(struct dm_struct *dm, u8 table)
 {
 	struct phydm_dig_struct *dig_tab = &dm->dm_dig_table;
@@ -1373,7 +1373,7 @@ phydm_ofdm_agc_tab_sel_8822c(struct dm_struct *dm, u8 table)
 }
 
 __odm_func__
-void
+static void
 phydm_sco_trk_fc_setting_8822c(struct dm_struct *dm, u8 central_ch)
 {
 	if (central_ch == 13 || central_ch == 14) {
@@ -1407,7 +1407,7 @@ phydm_sco_trk_fc_setting_8822c(struct dm_struct *dm, u8 central_ch)
 }
 
 __odm_func__
-void
+static void
 phydm_tx_dfir_setting_8822c(struct dm_struct *dm, u8 central_ch)
 {
 	if (central_ch <= 14) {
@@ -1421,7 +1421,7 @@ phydm_tx_dfir_setting_8822c(struct dm_struct *dm, u8 central_ch)
 }
 
 __odm_func__
-void phydm_set_manual_nbi_8822c(struct dm_struct *dm, boolean en_manual_nbi,
+static void phydm_set_manual_nbi_8822c(struct dm_struct *dm, boolean en_manual_nbi,
 				int tone_idx)
 {
 	if (en_manual_nbi) {
@@ -1450,7 +1450,7 @@ void phydm_set_manual_nbi_8822c(struct dm_struct *dm, boolean en_manual_nbi,
 }
 
 __odm_func__
-void phydm_set_auto_nbi_8822c(struct dm_struct *dm, boolean en_auto_nbi)
+static void phydm_set_auto_nbi_8822c(struct dm_struct *dm, boolean en_auto_nbi)
 {
 	if (en_auto_nbi) {
 		/*enable auto nbi detection*/
@@ -1463,7 +1463,7 @@ void phydm_set_auto_nbi_8822c(struct dm_struct *dm, boolean en_auto_nbi)
 }
 
 __odm_func__
-void phydm_csi_mask_enable_8822c(struct dm_struct *dm, boolean enable)
+static void phydm_csi_mask_enable_8822c(struct dm_struct *dm, boolean enable)
 {
 	if (enable)
 		odm_set_bb_reg(dm, R_0xc0c, BIT(3), 0x1);
@@ -1472,7 +1472,7 @@ void phydm_csi_mask_enable_8822c(struct dm_struct *dm, boolean enable)
 }
 
 __odm_func__
-void phydm_set_csi_mask_8822c(struct dm_struct *dm, u32 tone_idx)
+static void phydm_set_csi_mask_8822c(struct dm_struct *dm, u32 tone_idx)
 {
 	u32 table_addr = tone_idx >> 1;
 
@@ -1493,7 +1493,7 @@ void phydm_set_csi_mask_8822c(struct dm_struct *dm, u32 tone_idx)
 }
 
 __odm_func__
-void phydm_clean_all_csi_mask_8822c(struct dm_struct *dm)
+static void phydm_clean_all_csi_mask_8822c(struct dm_struct *dm)
 {
 	u8 i = 0;
 
@@ -1512,7 +1512,7 @@ void phydm_clean_all_csi_mask_8822c(struct dm_struct *dm)
 }
 
 __odm_func__
-void phydm_spur_eliminate_8822c(struct dm_struct *dm, u8 central_ch)
+static void phydm_spur_eliminate_8822c(struct dm_struct *dm, u8 central_ch)
 {
 	phydm_set_auto_nbi_8822c(dm, false);
 	phydm_csi_mask_enable_8822c(dm, true);
@@ -1534,7 +1534,7 @@ void phydm_spur_eliminate_8822c(struct dm_struct *dm, u8 central_ch)
 }
 
 __odm_func__
-void phydm_set_dis_dpd_by_rate_8822c(struct dm_struct *dm, u16 bitmask)
+static void phydm_set_dis_dpd_by_rate_8822c(struct dm_struct *dm, u16 bitmask)
 {
 	/* bit(0) : ofdm 6m*/
 	/* bit(1) : ofdm 9m*/
@@ -2084,7 +2084,7 @@ u16 phydm_get_dis_dpd_by_rate_8822c(struct dm_struct *dm)
 }
 
 __odm_func__
-void phydm_cck_pd_init_8822c(struct dm_struct *dm)
+static void phydm_cck_pd_init_8822c(struct dm_struct *dm)
 {
 	struct phydm_iot_center	*iot_table = &dm->iot_table;
 

@@ -343,7 +343,7 @@ void phydm_config_cck_tx_path(void *dm_void, enum bb_path path)
 #endif
 }
 
-void phydm_config_trx_path_v2(void *dm_void, char input[][16], u32 *_used,
+static void phydm_config_trx_path_v2(void *dm_void, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 #if (RTL8822B_SUPPORT || RTL8197F_SUPPORT || RTL8192F_SUPPORT ||\
@@ -406,7 +406,7 @@ void phydm_config_trx_path_v2(void *dm_void, char input[][16], u32 *_used,
 #endif
 }
 
-void phydm_config_trx_path_v1(void *dm_void, char input[][16], u32 *_used,
+static void phydm_config_trx_path_v1(void *dm_void, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 #if (RTL8192E_SUPPORT || RTL8812A_SUPPORT)
@@ -827,7 +827,7 @@ void phydm_set_ext_switch(void *dm_void, u32 ext_ant_switch)
 #endif
 }
 
-void phydm_csi_mask_enable(void *dm_void, u32 enable)
+static void phydm_csi_mask_enable(void *dm_void, u32 enable)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	boolean en = false;
@@ -851,7 +851,7 @@ void phydm_csi_mask_enable(void *dm_void, u32 enable)
 	}
 }
 
-void phydm_clean_all_csi_mask(void *dm_void)
+static void phydm_clean_all_csi_mask(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -890,7 +890,7 @@ void phydm_clean_all_csi_mask(void *dm_void)
 	}
 }
 
-void phydm_set_csi_mask(void *dm_void, u32 tone_idx_tmp, u8 tone_direction)
+static void phydm_set_csi_mask(void *dm_void, u32 tone_idx_tmp, u8 tone_direction)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u8 byte_offset = 0, bit_offset = 0;
@@ -949,7 +949,7 @@ void phydm_set_csi_mask(void *dm_void, u32 tone_idx_tmp, u8 tone_direction)
 		  (tone_idx_tmp + tone_num_shift), target_reg, reg_tmp_value);
 }
 
-void phydm_set_nbi_reg(void *dm_void, u32 tone_idx_tmp, u32 bw)
+static void phydm_set_nbi_reg(void *dm_void, u32 tone_idx_tmp, u32 bw)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	/*tone_idx X 10*/
@@ -1044,7 +1044,7 @@ void phydm_nbi_enable(void *dm_void, u32 enable)
 	}
 }
 
-u8 phydm_find_fc(void *dm_void, u32 channel, u32 bw, u32 second_ch, u32 *fc_in)
+static u8 phydm_find_fc(void *dm_void, u32 channel, u32 bw, u32 second_ch, u32 *fc_in)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 fc = *fc_in;
@@ -1119,7 +1119,7 @@ u8 phydm_find_fc(void *dm_void, u32 channel, u32 bw, u32 second_ch, u32 *fc_in)
 	return PHYDM_SET_SUCCESS;
 }
 
-u8 phydm_find_intf_distance(void *dm_void, u32 bw, u32 fc, u32 f_interference,
+static u8 phydm_find_intf_distance(void *dm_void, u32 bw, u32 fc, u32 f_interference,
 			    u32 *tone_idx_tmp_in)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -1201,7 +1201,7 @@ u8 phydm_csi_mask_setting(void *dm_void, u32 enable, u32 ch, u32 bw,
 }
 
 #ifdef PHYDM_IC_JGR3_SERIES_SUPPORT
-u8 phydm_find_intf_distance_jgr3(void *dm_void, u32 bw, u32 fc,
+static u8 phydm_find_intf_distance_jgr3(void *dm_void, u32 bw, u32 fc,
 				 u32 f_interference, u32 *tone_idx_tmp_in)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -1411,7 +1411,7 @@ void phydm_set_csi_mask_jgr3(void *dm_void, u32 tone_idx_tmp, u8 tone_direction,
 	odm_set_bb_reg(dm, R_0x1ee8, 0x3, 0x0);
 }
 
-void phydm_nbi_reset_jgr3(void *dm_void)
+static void phydm_nbi_reset_jgr3(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -1713,7 +1713,7 @@ u8 phydm_phystat_rpt_jgr3(void *dm_void, enum phystat_rpt info,
 	return return_info;
 }
 
-void phydm_ex_hal8814b_wifi_only_hw_config(void *dm_void)
+static void phydm_ex_hal8814b_wifi_only_hw_config(void *dm_void)
 {
 	/*BB control*/
 	/*halwifionly_phy_set_bb_reg(pwifionlycfg, 0x4c, 0x01800000, 0x2);*/
@@ -1748,7 +1748,7 @@ void phydm_user_position_for_sniffer(void *dm_void, u8 user_position)
 	odm_set_bb_reg(dm, R_0xa68, (BIT(19) | BIT(18)), user_position);
 }
 
-boolean
+static boolean
 phydm_bb_ctrl_txagc_ofst_jgr3(void *dm_void, s8 pw_offset, /*@(unit: dB)*/
 			      u8 add_half_db /*@(+0.5 dB)*/)
 {
@@ -2025,7 +2025,7 @@ void phydm_stop_ck320(void *dm_void, u8 enable)
 	}
 }
 
-boolean
+static boolean
 phydm_bb_ctrl_txagc_ofst(void *dm_void, s8 pw_offset, /*@(unit: dB)*/
 			 u8 add_half_db /*@(+0.5 dB)*/)
 {

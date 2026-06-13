@@ -500,7 +500,7 @@ void phydm_cck_pd_init_type3(void *dm_void)
 #endif /*#ifdef PHYDM_COMPILE_CCKPD_TYPE3*/
 
 #ifdef PHYDM_COMPILE_CCKPD_TYPE4
-void phydm_write_cck_pd_type4(void *dm_void, enum cckpd_lv lv,
+static void phydm_write_cck_pd_type4(void *dm_void, enum cckpd_lv lv,
 			      enum cckpd_mode mode)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -579,7 +579,7 @@ void phydm_write_cck_pd_type4(void *dm_void, enum cckpd_lv lv,
 	}
 }
 
-void phydm_set_cck_pd_lv_type4(void *dm_void, enum cckpd_lv lv)
+static void phydm_set_cck_pd_lv_type4(void *dm_void, enum cckpd_lv lv)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_cckpd_struct *cckpd_t = &dm->dm_cckpd_table;
@@ -659,7 +659,7 @@ void phydm_set_cck_pd_lv_type4(void *dm_void, enum cckpd_lv lv)
 	phydm_write_cck_pd_type4(dm, lv, cck_mode);
 }
 
-void phydm_read_cckpd_para_type4(void *dm_void)
+static void phydm_read_cckpd_para_type4(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_cckpd_struct *cckpd_t = &dm->dm_cckpd_table;
@@ -715,7 +715,7 @@ void phydm_read_cckpd_para_type4(void *dm_void)
 		  curr_cck_pd_t[bw][n_rx - 1][0]);
 }
 
-void phydm_cckpd_type4(void *dm_void)
+static void phydm_cckpd_type4(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_cckpd_struct *cckpd_t = &dm->dm_cckpd_table;
@@ -798,7 +798,7 @@ void phydm_cckpd_type4(void *dm_void)
 	phydm_read_cckpd_para_type4(dm);
 }
 
-void phydm_cck_pd_init_type4(void *dm_void)
+static void phydm_cck_pd_init_type4(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_cckpd_struct *cckpd_t = &dm->dm_cckpd_table;
@@ -952,7 +952,7 @@ void phydm_cck_pd_init_type4(void *dm_void)
 	}
 }
 
-void phydm_invalid_cckpd_type4(void *dm_void)
+static void phydm_invalid_cckpd_type4(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_cckpd_struct *cckpd_t = &dm->dm_cckpd_table;
@@ -1026,7 +1026,7 @@ void phydm_set_cckpd_val(void *dm_void, u32 *val_buf, u8 val_len)
 	}
 }
 
-boolean
+static boolean
 phydm_stop_cck_pd_th(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;

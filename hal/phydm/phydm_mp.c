@@ -33,7 +33,7 @@
 #ifdef PHYDM_MP_SUPPORT
 #ifdef PHYDM_IC_JGR3_SERIES_SUPPORT
 
-void phydm_mp_set_single_tone_jgr3(void *dm_void, boolean is_single_tone,
+static void phydm_mp_set_single_tone_jgr3(void *dm_void, boolean is_single_tone,
 				   u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -155,7 +155,7 @@ void phydm_mp_set_single_tone_jgr3(void *dm_void, boolean is_single_tone,
 	}
 }
 
-void phydm_mp_set_carrier_supp_jgr3(void *dm_void, boolean is_carrier_supp,
+static void phydm_mp_set_carrier_supp_jgr3(void *dm_void, boolean is_carrier_supp,
 				    u32 rate_index)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;

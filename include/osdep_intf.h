@@ -138,4 +138,24 @@ int rtw_gw_addr_query(_adapter *padapter);
 int rtw_suspend_common(_adapter *padapter);
 int rtw_resume_common(_adapter *padapter);
 
+
+/* -Wmissing-prototypes: cross-file declarations */
+void rtw_indicate_wx_assoc_event(_adapter *padapter);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+void rtw_indicate_wx_disassoc_event(_adapter *padapter);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+void netdev_br_init(struct net_device *netdev);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+int pm_netdev_open(struct net_device *pnetdev, u8 bnormal);
+
+
+/* -Wmissing-prototypes: cross-file declarations */
+int pm_netdev_close(struct net_device *pnetdev, u8 bnormal);
+
 #endif /* _OSDEP_INTF_H_ */

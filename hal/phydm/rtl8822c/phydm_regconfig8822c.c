@@ -95,7 +95,7 @@ void odm_config_rf_radio_b_8822c(struct dm_struct *dm, u32 addr, u32 data)
 		  addr, data);
 }
 
-void phydm_agc_lower_bound_8822c(struct dm_struct *dm, u32 addr, u32 data)
+static void phydm_agc_lower_bound_8822c(struct dm_struct *dm, u32 addr, u32 data)
 {
 	u8 rxbb_gain = (u8)(data & 0x0000001f);
 	u8 mp_gain = (u8)((data & 0x003f0000) >> 16);
@@ -114,7 +114,7 @@ void phydm_agc_lower_bound_8822c(struct dm_struct *dm, u32 addr, u32 data)
 	}
 }
 
-void phydm_agc_store_8822c(struct dm_struct *dm, u32 addr, u32 data)
+static void phydm_agc_store_8822c(struct dm_struct *dm, u32 addr, u32 data)
 {
 	u16 rf_gain = (u16)(data & 0x000003ff);
 	u8 mp_gain = (u8)((data & 0x003f0000) >> 16);
