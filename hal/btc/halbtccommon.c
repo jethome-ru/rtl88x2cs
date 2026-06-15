@@ -2029,7 +2029,7 @@ static void rtw_btc_action_ext_chip(struct btc_coexist *btc)
 		rtw_btc_action_rf4ce(btc);
 }
 
-u8 rtw_btc_action_rf4ce_new_tdma(struct btc_coexist *btc, u8 type)
+static u8 rtw_btc_action_rf4ce_new_tdma(struct btc_coexist *btc, u8 type)
 {
 	struct btc_coex_sta *coex_sta = &btc->coex_sta;
 	const struct btc_chip_para *chip_para = btc->chip_para;
@@ -2082,7 +2082,7 @@ u8 rtw_btc_action_rf4ce_new_tdma(struct btc_coexist *btc, u8 type)
 	return tdma_case;
 }
 
-u8 rtw_btc_ext_chip_new_tdma(struct btc_coexist *btc, u8 type)
+static u8 rtw_btc_ext_chip_new_tdma(struct btc_coexist *btc, u8 type)
 {
 	struct btc_coex_sta *coex_sta = &btc->coex_sta;
 	u8 tdma_case = 0;

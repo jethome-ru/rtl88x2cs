@@ -76,7 +76,7 @@ void phydm_wt_reg_pwr(void *dm_void, boolean is_ofst1, boolean pwr_ofst_en,
 	}
 };
 
-void phydm_rd_ram_pwr(void *dm_void, u8 macid, u32 *_used, char *output,
+static void phydm_rd_ram_pwr(void *dm_void, u8 macid, u32 *_used, char *output,
 		      u32 *_out_len)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -148,7 +148,7 @@ void phydm_wt_ram_pwr(void *dm_void, u8 macid, boolean is_ofst1,
 	odm_set_bb_reg(dm, R_0x1e84, MASKDWORD, 0x0); /* disable rd/wt*/
 };
 
-void phydm_rst_ram_pwr(void *dm_void)
+static void phydm_rst_ram_pwr(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_bb_ram_per_sta *dm_ram_per_sta = NULL;
@@ -172,7 +172,7 @@ void phydm_rst_ram_pwr(void *dm_void)
 	odm_set_bb_reg(dm, R_0x1e84, MASKDWORD, 0x0);
 };
 
-u8 phydm_pwr_lv_mapping_2nd(u8 tx_pwr_lv)
+static u8 phydm_pwr_lv_mapping_2nd(u8 tx_pwr_lv)
 {
 	if (tx_pwr_lv == tx_high_pwr_level_level3)
 		return PHYDM_2ND_OFFSET_MINUS_11DB;
@@ -184,7 +184,7 @@ u8 phydm_pwr_lv_mapping_2nd(u8 tx_pwr_lv)
 		return PHYDM_2ND_OFFSET_ZERO;
 }
 
-void phydm_pwr_lv_ctrl(void *dm_void, u8 macid, u8 tx_pwr_lv)
+static void phydm_pwr_lv_ctrl(void *dm_void, u8 macid, u8 tx_pwr_lv)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	s8 pwr_offset = 0;
@@ -201,7 +201,7 @@ void phydm_pwr_lv_ctrl(void *dm_void, u8 macid, u8 tx_pwr_lv)
 	phydm_wt_ram_pwr(dm, macid, RAM_PWR_OFST0, true, pwr_offset);
 }
 
-void phydm_dtp_fill_cmninfo_2nd(void *dm_void, u8 sta_id, u8 dtp_lvl)
+static void phydm_dtp_fill_cmninfo_2nd(void *dm_void, u8 sta_id, u8 dtp_lvl)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct cmn_sta_info *sta = dm->phydm_sta_info[sta_id];
@@ -219,7 +219,7 @@ void phydm_dtp_fill_cmninfo_2nd(void *dm_void, u8 sta_id, u8 dtp_lvl)
 		  sta_id, sta->mac_id, dtp->dyn_tx_power);
 }
 
-void phydm_dtp_init_2nd(void *dm_void)
+static void phydm_dtp_init_2nd(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -236,7 +236,7 @@ void phydm_dtp_init_2nd(void *dm_void)
 };
 #endif
 
-boolean
+static boolean
 phydm_check_rates(void *dm_void, u8 rate_idx)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -300,7 +300,7 @@ phydm_check_rates(void *dm_void, u8 rate_idx)
 		return false;
 }
 
-enum rf_path
+static enum rf_path
 phydm_check_paths(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -331,7 +331,7 @@ u8 phydm_dtp_get_txagc(void *dm_void, enum rf_path path, u8 hw_rate)
 }
 #endif
 
-u8 phydm_search_min_power_index(void *dm_void)
+static u8 phydm_search_min_power_index(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	enum rf_path path;
@@ -399,7 +399,7 @@ void phydm_dynamic_tx_power_init(void *dm_void)
 	}
 }
 
-void phydm_noisy_enhance_hp_th(void *dm_void, u8 noisy_state)
+static void phydm_noisy_enhance_hp_th(void *dm_void, u8 noisy_state)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
@@ -418,7 +418,7 @@ void phydm_noisy_enhance_hp_th(void *dm_void, u8 noisy_state)
 		  dm->enhance_pwr_th[2]);
 }
 
-u8 phydm_pwr_lvl_check(void *dm_void, u8 input_rssi)
+static u8 phydm_pwr_lvl_check(void *dm_void, u8 input_rssi)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u8 th0, th1, th2;
@@ -448,7 +448,7 @@ u8 phydm_pwr_lvl_check(void *dm_void, u8 input_rssi)
 		return tx_high_pwr_level_unchange;
 }
 
-u8 phydm_pwr_lv_mapping(u8 tx_pwr_lv)
+static u8 phydm_pwr_lv_mapping(u8 tx_pwr_lv)
 {
 	if (tx_pwr_lv == tx_high_pwr_level_level3)
 		return PHYDM_OFFSET_MINUS_11DB;
@@ -460,7 +460,7 @@ u8 phydm_pwr_lv_mapping(u8 tx_pwr_lv)
 		return PHYDM_OFFSET_ZERO;
 }
 
-void phydm_dynamic_response_power(void *dm_void)
+static void phydm_dynamic_response_power(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u8 rpwr = 0;
@@ -484,7 +484,7 @@ void phydm_dynamic_response_power(void *dm_void)
 		  dm->dynamic_tx_high_power_lvl);
 }
 
-void phydm_dtp_fill_cmninfo(void *dm_void, u8 sta_id, u8 dtp_lvl)
+static void phydm_dtp_fill_cmninfo(void *dm_void, u8 sta_id, u8 dtp_lvl)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct cmn_sta_info *sta = dm->phydm_sta_info[sta_id];
@@ -500,7 +500,7 @@ void phydm_dtp_fill_cmninfo(void *dm_void, u8 sta_id, u8 dtp_lvl)
 		  sta_id, sta->mac_id, dtp->dyn_tx_power);
 }
 
-void phydm_dtp_per_sta(void *dm_void)
+static void phydm_dtp_per_sta(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct cmn_sta_info *sta = NULL;

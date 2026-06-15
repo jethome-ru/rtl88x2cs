@@ -192,7 +192,7 @@ phydm_la_mv_data_2_tx_buffer(void *dm_void)
 
 #ifdef PHYDM_IC_JGR3_SERIES_SUPPORT
 
-void phydm_la_bb_adv_reset_jgr3(void *dm_void)
+static void phydm_la_bb_adv_reset_jgr3(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -202,7 +202,7 @@ void phydm_la_bb_adv_reset_jgr3(void *dm_void)
 
 }
 
-void phydm_la_bb_adv_trig_setting_jgr3(void *dm_void)
+static void phydm_la_bb_adv_trig_setting_jgr3(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -254,7 +254,7 @@ void phydm_la_bb_adv_trig_setting_jgr3(void *dm_void)
 	}
 }
 
-void phydm_la_bb_adv_cmd_show_jgr3(void *dm_void, u32 *_used,
+static void phydm_la_bb_adv_cmd_show_jgr3(void *dm_void, u32 *_used,
 				   char *output, u32 *_out_len)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -273,7 +273,7 @@ void phydm_la_bb_adv_cmd_show_jgr3(void *dm_void, u32 *_used,
 		 adv->la_and4_mask, adv->la_and4_bitmap, adv->la_and4_inv);
 }
 
-void phydm_la_bb_adv_cmd_jgr3(void *dm_void, char input[][16], u32 *_used,
+static void phydm_la_bb_adv_cmd_jgr3(void *dm_void, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -333,7 +333,7 @@ void phydm_la_bb_adv_cmd_jgr3(void *dm_void, char input[][16], u32 *_used,
 	phydm_la_bb_adv_cmd_show_jgr3(dm, _used, output, _out_len);
 }
 
-void phydm_la_cmd_fast_jgr3(void *dm_void, char input[][16], u32 *_used,
+static void phydm_la_cmd_fast_jgr3(void *dm_void, char input[][16], u32 *_used,
 			    char *output, u32 *_out_len)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -642,7 +642,7 @@ void phydm_la_cmd_fast_jgr3(void *dm_void, char input[][16], u32 *_used,
 
 #endif
 
-void
+static void
 phydm_la_buffer_print(void *dm_void, char input[][16], u32 *_used,
 		      char *output, u32 *_out_len)
 {
@@ -720,7 +720,7 @@ phydm_la_buffer_print(void *dm_void, char input[][16], u32 *_used,
 	pr_debug("Dump_End\n\n");
 }
 
-void
+static void
 phydm_la_buffer_release(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -733,7 +733,7 @@ phydm_la_buffer_release(void *dm_void)
 	}
 }
 
-boolean
+static boolean
 phydm_la_buffer_allocate(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -767,7 +767,7 @@ phydm_la_buffer_allocate(void *dm_void)
 	return ret;
 }
 
-void phydm_la_access_tx_pkt_buf(void *dm_void, u32 addr, u32 buff_idx)
+static void phydm_la_access_tx_pkt_buf(void *dm_void, u32 addr, u32 buff_idx)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -812,7 +812,7 @@ void phydm_la_access_tx_pkt_buf(void *dm_void, u32 addr, u32 buff_idx)
 		pr_debug("%08x%08x\n", data_h, data_l);
 }
 
-void phydm_la_get_tx_pkt_buf(void *dm_void)
+static void phydm_la_get_tx_pkt_buf(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -897,7 +897,7 @@ void phydm_la_get_tx_pkt_buf(void *dm_void)
 	pr_debug("Dump_End\n");
 }
 
-void phydm_la_set_trig_src(void *dm_void, u8 la_trig_mode)
+static void phydm_la_set_trig_src(void *dm_void, u8 la_trig_mode)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 reg = (dm->support_ic_type == ODM_RTL8192F) ? R_0x7f0 : R_0x7c0;
@@ -908,7 +908,7 @@ void phydm_la_set_trig_src(void *dm_void, u8 la_trig_mode)
 		odm_set_mac_reg(dm, reg, BIT(3), 0);
 }
 
-void phydm_la_set_mac_iq_dump(void *dm_void, boolean impossible_trig_condi)
+static void phydm_la_set_mac_iq_dump(void *dm_void, boolean impossible_trig_condi)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -975,7 +975,7 @@ void phydm_la_set_mac_iq_dump(void *dm_void, boolean impossible_trig_condi)
 	#endif
 }
 
-void phydm_la_set_bb_dbg_port(void *dm_void, boolean impossible_trig_condi)
+static void phydm_la_set_bb_dbg_port(void *dm_void, boolean impossible_trig_condi)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -1022,7 +1022,7 @@ void phydm_la_set_bb_dbg_port(void *dm_void, boolean impossible_trig_condi)
 	}
 }
 
-void phydm_la_set_bb(void *dm_void)
+static void phydm_la_set_bb(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -1110,7 +1110,7 @@ void phydm_la_set_bb(void *dm_void)
 	}
 }
 
-void phydm_la_set_mac_trigger_time(void *dm_void, u32 trigger_time_mu_sec)
+static void phydm_la_set_mac_trigger_time(void *dm_void, u32 trigger_time_mu_sec)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u8 time_unit_num = 0;
@@ -1155,7 +1155,7 @@ void phydm_la_set_mac_trigger_time(void *dm_void, u32 trigger_time_mu_sec)
 	}
 }
 
-void phydm_la_set_buff_mode(void *dm_void, enum la_buff_mode mode)
+static void phydm_la_set_buff_mode(void *dm_void, enum la_buff_mode mode)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;
@@ -1228,7 +1228,7 @@ void phydm_la_set_buff_mode(void *dm_void, enum la_buff_mode mode)
 		 smp->smp_number_max);
 }
 
-void phydm_la_adc_smp_start(void *dm_void)
+static void phydm_la_adc_smp_start(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct rt_adcsmp *smp = &dm->adcsmp;

@@ -26,7 +26,7 @@
 #include "../phydm_precomp.h"
 
 #if (RTL8822C_SUPPORT)
-void phydm_dynamic_switch_htstf_agc_8822c(struct dm_struct *dm)
+static void phydm_dynamic_switch_htstf_agc_8822c(struct dm_struct *dm)
 {
 	u8 ndp_valid_cnt = 0;
 	u8 ndp_valid_cnt_diff = 0;

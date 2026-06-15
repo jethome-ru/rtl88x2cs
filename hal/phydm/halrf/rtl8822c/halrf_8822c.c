@@ -154,7 +154,7 @@ void odm_tx_pwr_track_set_pwr8822c(void *dm_void, enum pwrtrack_method method,
 	}
 }
 
-void get_delta_swing_table_8822c(void *dm_void,
+static void get_delta_swing_table_8822c(void *dm_void,
 	u8 **temperature_up_a,
 	u8 **temperature_down_a,
 	u8 **temperature_up_b,
@@ -197,7 +197,7 @@ void get_delta_swing_table_8822c(void *dm_void,
 	}
 }
 
-void _phy_aac_calibrate_8822c(struct dm_struct *dm)
+static void _phy_aac_calibrate_8822c(struct dm_struct *dm)
 {
 #if 1
 	u32 cnt = 0;
@@ -220,7 +220,7 @@ void _phy_aac_calibrate_8822c(struct dm_struct *dm)
 	RF_DBG(dm, DBG_RF_IQK, "[AACK]AACK end!!!!!!!\n");
 #endif
 }
-void _phy_rt_calibrate_8822c(struct dm_struct *dm)
+static void _phy_rt_calibrate_8822c(struct dm_struct *dm)
 {
 	RF_DBG(dm, DBG_RF_IQK, "[RTK]RTK start!!!!!!!\n");
 	odm_set_rf_reg(dm, RF_PATH_A, 0xcc, RFREGOFFSETMASK, 0x0f000);
@@ -230,7 +230,7 @@ void _phy_rt_calibrate_8822c(struct dm_struct *dm)
 	RF_DBG(dm, DBG_RF_IQK, "[RTK]RTK end!!!!!!!\n");
 }
 
-void halrf_reload_bp_8822c(struct dm_struct *dm, u32 *bp_reg, u32 *bp)
+static void halrf_reload_bp_8822c(struct dm_struct *dm, u32 *bp_reg, u32 *bp)
 {
 	u32 i;
 
@@ -238,7 +238,7 @@ void halrf_reload_bp_8822c(struct dm_struct *dm, u32 *bp_reg, u32 *bp)
 		odm_write_4byte(dm, bp_reg[i], bp[i]);
 }
 
-void halrf_reload_bprf_8822c(struct dm_struct *dm, u32 *bp_reg, u32 bp[][2])
+static void halrf_reload_bprf_8822c(struct dm_struct *dm, u32 *bp_reg, u32 bp[][2])
 {
 	u32 i;
 
@@ -250,7 +250,7 @@ void halrf_reload_bprf_8822c(struct dm_struct *dm, u32 *bp_reg, u32 bp[][2])
 	}
 }
 
-void halrf_bp_8822c(struct dm_struct *dm, u32 *bp_reg, u32 *bp)
+static void halrf_bp_8822c(struct dm_struct *dm, u32 *bp_reg, u32 *bp)
 {
 	u32 i;
 
@@ -258,7 +258,7 @@ void halrf_bp_8822c(struct dm_struct *dm, u32 *bp_reg, u32 *bp)
 		bp[i] = odm_read_4byte(dm, bp_reg[i]);
 }
 
-void halrf_bprf_8822c(struct dm_struct *dm, u32 *bp_reg, u32 bp[][2])
+static void halrf_bprf_8822c(struct dm_struct *dm, u32 *bp_reg, u32 bp[][2])
 {
 	u32 i;
 
@@ -270,7 +270,7 @@ void halrf_bprf_8822c(struct dm_struct *dm, u32 *bp_reg, u32 bp[][2])
 	}
 }
 
-void halrf_swap_8822c(struct dm_struct *dm, u32 *v1, u32 *v2)
+static void halrf_swap_8822c(struct dm_struct *dm, u32 *v1, u32 *v2)
 {
 	u32 temp;
 
@@ -279,7 +279,7 @@ void halrf_swap_8822c(struct dm_struct *dm, u32 *v1, u32 *v2)
 	*v2 = temp;
 }
 
-void halrf_bubble_8822c(struct dm_struct *dm, u32 *v1, u32 *v2)
+static void halrf_bubble_8822c(struct dm_struct *dm, u32 *v1, u32 *v2)
 {
 	u32 temp;
 
@@ -294,7 +294,7 @@ void halrf_bubble_8822c(struct dm_struct *dm, u32 *v1, u32 *v2)
 	}
 }
 
-void halrf_b_sort_8822c(struct dm_struct *dm, u32 *iv, u32 *qv)
+static void halrf_b_sort_8822c(struct dm_struct *dm, u32 *iv, u32 *qv)
 {
 	u32 temp;
 	u32 i, j;
@@ -308,7 +308,7 @@ void halrf_b_sort_8822c(struct dm_struct *dm, u32 *iv, u32 *qv)
 	}
 }
 
-void halrf_minmax_compare_8822c(struct dm_struct *dm, u32 value, u32 *min,
+static void halrf_minmax_compare_8822c(struct dm_struct *dm, u32 value, u32 *min,
 				u32 *max)
 {
 	if (value >= 0x200) {
@@ -337,7 +337,7 @@ void halrf_minmax_compare_8822c(struct dm_struct *dm, u32 value, u32 *min,
 	}
 }
 
-boolean halrf_compare_8822c(struct dm_struct *dm, u32 value)
+static boolean halrf_compare_8822c(struct dm_struct *dm, u32 value)
 {
 	boolean fail = false;
 
@@ -351,7 +351,7 @@ boolean halrf_compare_8822c(struct dm_struct *dm, u32 value)
 	return fail;
 }
 
-void halrf_mode_8822c(struct dm_struct *dm, u32 *i_value, u32 *q_value)
+static void halrf_mode_8822c(struct dm_struct *dm, u32 *i_value, u32 *q_value)
 {
 	u32 iv[SN], qv[SN], im[SN], qm[SN], temp, temp1, temp2;
 	u32 p, m, t;
@@ -511,7 +511,7 @@ void halrf_mode_8822c(struct dm_struct *dm, u32 *i_value, u32 *q_value)
 #endif
 }
 
-void halrf_biask_backup_8822c(void *dm_void)
+static void halrf_biask_backup_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_dack_info *dack = &dm->dack_info;
@@ -522,7 +522,7 @@ void halrf_biask_backup_8822c(void *dm_void)
 	dack->biask_d[1][1]= (u8)odm_get_bb_reg(dm, 0x453c, 0x1ff8);
 }
 
-void halrf_dck_backup_8822c(void *dm_void)
+static void halrf_dck_backup_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_dack_info *dack = &dm->dack_info;
@@ -537,7 +537,7 @@ void halrf_dck_backup_8822c(void *dm_void)
 	dack->dck_d[1][1][0] = (u8)odm_get_bb_reg(dm, 0x41d8, 0xf0000000);
 	dack->dck_d[1][1][1] = (u8)odm_get_bb_reg(dm, 0x41dc, 0xf);
 }
-void halrf_dack_backup_8822c(void *dm_void)
+static void halrf_dack_backup_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_dack_info *dack = &dm->dack_info;
@@ -589,7 +589,7 @@ void halrf_dack_backup_8822c(void *dm_void)
 	halrf_biask_backup_8822c(dm);
 }
 
-void halrf_biask_restore_8822c(void *dm_void)
+static void halrf_biask_restore_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_dack_info *dack = &dm->dack_info;
@@ -600,7 +600,7 @@ void halrf_biask_restore_8822c(void *dm_void)
 	odm_set_bb_reg(dm, 0x41cc, 0x1ff8000, dack->biask_d[1][1]);
 }
 
-void halrf_dck_restore_8822c(void *dm_void)
+static void halrf_dck_restore_8822c(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_dack_info *dack = &dm->dack_info;
@@ -816,7 +816,7 @@ void halrf_dack_restore_8822c(void *dm_void)
 	halrf_biask_restore_8822c(dm);
 }
 
-void halrf_polling_check(void *dm_void, u32 add, u32 bmask, u32 data)
+static void halrf_polling_check(void *dm_void, u32 add, u32 bmask, u32 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 c = 0;
@@ -1400,7 +1400,7 @@ void halrf_rxdck_8822c(void *dm_void)
 	odm_set_rf_reg(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK, 0x3ffff);
 	odm_set_rf_reg(dm, RF_PATH_B, 0x0, RFREGOFFSETMASK, 0x3ffff);
 }
-void _phy_x2_calibrate_8822c(struct dm_struct *dm)
+static void _phy_x2_calibrate_8822c(struct dm_struct *dm)
 {
 	RF_DBG(dm, DBG_RF_IQK, "[X2K]X2K start!!!!!!!\n");
 	/*X2K*/
@@ -1487,7 +1487,7 @@ void phy_set_rf_path_switch_8822c(void *adapter, boolean is_main)
 }
 
 #if ((DM_ODM_SUPPORT_TYPE & ODM_AP) || (DM_ODM_SUPPORT_TYPE == ODM_CE))
-boolean _phy_query_rf_path_switch_8822c(struct dm_struct *dm)
+static boolean _phy_query_rf_path_switch_8822c(struct dm_struct *dm)
 #else
 boolean _phy_query_rf_path_switch_8822c(void *adapter)
 #endif
@@ -1505,7 +1505,7 @@ boolean _phy_query_rf_path_switch_8822c(void *adapter)
 }
 
 #if ((DM_ODM_SUPPORT_TYPE & ODM_AP) || (DM_ODM_SUPPORT_TYPE == ODM_CE))
-boolean phy_query_rf_path_switch_8822c(struct dm_struct *dm)
+static boolean phy_query_rf_path_switch_8822c(struct dm_struct *dm)
 #else
 boolean phy_query_rf_path_switch_8822c(void *adapter)
 #endif

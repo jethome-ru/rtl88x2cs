@@ -17,7 +17,7 @@
 #include <hal_data.h>
 
 /* A mapping from HalData to ODM. */
-enum odm_board_type boardType(u8 InterfaceSel)
+static enum odm_board_type boardType(u8 InterfaceSel)
 {
 	enum odm_board_type        board	= ODM_BOARD_DEFAULT;
 
@@ -106,7 +106,7 @@ void rtw_phydm_iqk_trigger(_adapter *adapter)
 }
 #endif
 
-void rtw_phydm_iqk_trigger_dbg(_adapter *adapter, bool recovery, bool clear, bool segment)
+static void rtw_phydm_iqk_trigger_dbg(_adapter *adapter, bool recovery, bool clear, bool segment)
 {
 	struct dm_struct *p_dm_odm = adapter_to_phydm(adapter);
 
@@ -116,7 +116,7 @@ void rtw_phydm_iqk_trigger_dbg(_adapter *adapter, bool recovery, bool clear, boo
 		halrf_iqk_trigger(p_dm_odm, recovery);
 #endif
 }
-void rtw_phydm_lck_trigger(_adapter *adapter)
+static void rtw_phydm_lck_trigger(_adapter *adapter)
 {
 	struct dm_struct *p_dm_odm = adapter_to_phydm(adapter);
 
@@ -192,7 +192,7 @@ void record_ra_info(void *p_dm_void, u8 macid, struct cmn_sta_info *p_sta, u64 r
 }
 
 #ifdef CONFIG_SUPPORT_DYNAMIC_TXPWR
-void rtw_phydm_fill_desc_dpt(void *dm, u8 *desc, u8 dpt_lv)
+static void rtw_phydm_fill_desc_dpt(void *dm, u8 *desc, u8 dpt_lv)
 {
 	struct dm_struct *p_dm = (struct dm_struct *)dm;
 	_adapter *adapter = p_dm->adapter;
@@ -294,7 +294,7 @@ void rtw_phydm_tdmadig(_adapter *adapter, u8 state)
 	}
 }
 #endif/*CONFIG_TDMADIG*/
-void rtw_phydm_ops_func_init(struct dm_struct *p_phydm)
+static void rtw_phydm_ops_func_init(struct dm_struct *p_phydm)
 {
 	struct ra_table *p_ra_t = &p_phydm->dm_ra_table;
 

@@ -31,7 +31,7 @@
 #include "phydm_precomp.h"
 
 #ifdef PHYDM_CCK_RX_PATHDIV_SUPPORT /* @PHYDM-342*/
-void phydm_cck_rx_pathdiv_manaul(void *dm_void, boolean en_cck_rx_pathdiv)
+static void phydm_cck_rx_pathdiv_manaul(void *dm_void, boolean en_cck_rx_pathdiv)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 

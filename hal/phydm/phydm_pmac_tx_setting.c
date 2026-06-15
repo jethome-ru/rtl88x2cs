@@ -33,7 +33,7 @@
 #ifdef PHYDM_PMAC_TX_SETTING_SUPPORT
 #ifdef PHYDM_IC_JGR3_SERIES_SUPPORT
 
-void phydm_start_cck_cont_tx_jgr3(void *dm_void,
+static void phydm_start_cck_cont_tx_jgr3(void *dm_void,
 				  struct phydm_pmac_info *tx_info)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -62,7 +62,7 @@ void phydm_start_cck_cont_tx_jgr3(void *dm_void,
 	pmac_tx->ofdm_cont_tx = false;
 }
 
-void phydm_stop_cck_cont_tx_jgr3(void *dm_void)
+static void phydm_stop_cck_cont_tx_jgr3(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_pmac_tx *pmac_tx = &dm->dm_pmac_tx_table;
@@ -82,7 +82,7 @@ void phydm_stop_cck_cont_tx_jgr3(void *dm_void)
 	odm_set_bb_reg(dm, R_0x1d0c, BIT(16), 0x1);
 }
 
-void phydm_start_ofdm_cont_tx_jgr3(void *dm_void)
+static void phydm_start_ofdm_cont_tx_jgr3(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_pmac_tx *pmac_tx = &dm->dm_pmac_tx_table;
@@ -104,7 +104,7 @@ void phydm_start_ofdm_cont_tx_jgr3(void *dm_void)
 	pmac_tx->ofdm_cont_tx = true;
 }
 
-void phydm_stop_ofdm_cont_tx_jgr3(void *dm_void)
+static void phydm_stop_ofdm_cont_tx_jgr3(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_pmac_tx *pmac_tx = &dm->dm_pmac_tx_table;
@@ -123,7 +123,7 @@ void phydm_stop_ofdm_cont_tx_jgr3(void *dm_void)
 	odm_set_bb_reg(dm, R_0x1d0c, BIT(16), 0x1);
 }
 
-void phydm_set_single_tone_jgr3(void *dm_void, boolean is_single_tone,
+static void phydm_set_single_tone_jgr3(void *dm_void, boolean is_single_tone,
 				boolean en_pmac_tx, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -234,7 +234,7 @@ void phydm_set_single_tone_jgr3(void *dm_void, boolean is_single_tone,
 	}
 }
 
-void phydm_stop_pmac_tx_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
+static void phydm_stop_pmac_tx_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_pmac_tx *pmac_tx = &dm->dm_pmac_tx_table;
@@ -265,7 +265,7 @@ void phydm_stop_pmac_tx_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
 	}
 }
 
-void phydm_set_mac_phy_txinfo_jgr3(void *dm_void,
+static void phydm_set_mac_phy_txinfo_jgr3(void *dm_void,
 				   struct phydm_pmac_info *tx_info)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -309,7 +309,7 @@ void phydm_set_mac_phy_txinfo_jgr3(void *dm_void,
 	odm_set_bb_reg(dm, R_0x9b8, 0xffff0000, tmp);
 }
 
-void phydm_set_sig_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
+static void phydm_set_sig_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_pmac_tx *pmac_tx = &dm->dm_pmac_tx_table;
@@ -370,7 +370,7 @@ void phydm_set_sig_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
 	}
 }
 
-void phydm_set_cck_preamble_hdr_jgr3(void *dm_void,
+static void phydm_set_cck_preamble_hdr_jgr3(void *dm_void,
 				     struct phydm_pmac_info *tx_info)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -394,7 +394,7 @@ void phydm_set_cck_preamble_hdr_jgr3(void *dm_void,
 		odm_set_bb_reg(dm, R_0x1e6c, BIT(16), 1);
 }
 
-void phydm_set_mode_jgr3(void *dm_void, struct phydm_pmac_info *tx_info,
+static void phydm_set_mode_jgr3(void *dm_void, struct phydm_pmac_info *tx_info,
 			 enum phydm_pmac_mode mode)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -418,7 +418,7 @@ void phydm_set_mode_jgr3(void *dm_void, struct phydm_pmac_info *tx_info,
 	}
 }
 
-void phydm_set_pmac_txon_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
+static void phydm_set_pmac_txon_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct phydm_pmac_tx *pmac_tx = &dm->dm_pmac_tx_table;
@@ -443,7 +443,7 @@ void phydm_set_pmac_txon_jgr3(void *dm_void, struct phydm_pmac_info *tx_info)
 		phydm_set_single_tone_jgr3(dm, true, true, pmac_tx->path);
 }
 
-void phydm_set_pmac_tx_jgr3(void *dm_void, struct phydm_pmac_info *tx_info,
+static void phydm_set_pmac_tx_jgr3(void *dm_void, struct phydm_pmac_info *tx_info,
 			    enum rf_path mpt_rf_path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -471,7 +471,7 @@ void phydm_set_pmac_tx_jgr3(void *dm_void, struct phydm_pmac_info *tx_info,
 	phydm_set_pmac_txon_jgr3(dm, tx_info);
 }
 
-void phydm_set_tmac_tx_jgr3(void *dm_void)
+static void phydm_set_tmac_tx_jgr3(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 

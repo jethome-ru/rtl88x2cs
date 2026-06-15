@@ -240,7 +240,7 @@ void halbtc8822c_cfg_init(struct btc_coexist *btc)
 void halbtc8822c_cfg_ant_switch(struct btc_coexist *btc)
 {}
 
-void halbtc8822c_cfg_gnt_fix(struct btc_coexist *btc)
+static void halbtc8822c_cfg_gnt_fix(struct btc_coexist *btc)
 {
 	struct btc_coex_sta *coex_sta = &btc->coex_sta;
 	struct btc_wifi_link_info_ext *link_info_ext = &btc->wifi_link_info_ext;
@@ -324,7 +324,7 @@ void halbtc8822c_cfg_gnt_debug(struct btc_coexist *btc)
 	/* btc->btc_write_1byte_bitmask(btc, 0x73, BIT(3), 0); */
 }
 
-void halbtc8822c_cfg_rfe_type(struct btc_coexist *btc)
+static void halbtc8822c_cfg_rfe_type(struct btc_coexist *btc)
 {
 	struct btc_coex_sta *coex_sta = &btc->coex_sta;
 	struct btc_rfe_type *rfe_type = &btc->rfe_type;
