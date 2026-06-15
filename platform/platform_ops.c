@@ -12,6 +12,8 @@
  * more details.
  *
  *****************************************************************************/
+#include "platform_ops.h"
+
 #ifndef CONFIG_PLATFORM_OPS
 /*
  * Return:

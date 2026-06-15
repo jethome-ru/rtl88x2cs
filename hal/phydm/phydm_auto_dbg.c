@@ -32,7 +32,7 @@
 
 #ifdef PHYDM_AUTO_DEGBUG
 
-void phydm_check_hang_reset(
+static void phydm_check_hang_reset(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -44,7 +44,7 @@ void phydm_check_hang_reset(
 	dm->debug_components &= (~ODM_COMP_API);
 }
 
-void phydm_check_hang_init(
+static void phydm_check_hang_init(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -351,7 +351,7 @@ void phydm_dbg_port_dump_n(void *dm_void, u32 *_used, char *output,
 #endif
 
 #if (ODM_IC_11AC_SERIES_SUPPORT == 1)
-void phydm_dbg_port_dump_ac(void *dm_void, u32 *_used, char *output,
+static void phydm_dbg_port_dump_ac(void *dm_void, u32 *_used, char *output,
 			    u32 *_out_len)
 {
 	u32 value32 = 0;
@@ -558,7 +558,7 @@ void phydm_dbg_port_dump_ac(void *dm_void, u32 *_used, char *output,
 #endif
 
 #ifdef PHYDM_IC_JGR3_SERIES_SUPPORT
-void phydm_dbg_port_dump_jgr3(void *dm_void, u32 *_used, char *output,
+static void phydm_dbg_port_dump_jgr3(void *dm_void, u32 *_used, char *output,
 			      u32 *_out_len)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
