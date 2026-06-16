@@ -7547,7 +7547,7 @@ s32 dump_mgntframe_and_wait_ack(_adapter *padapter, struct xmit_frame *pmgntfram
 }
 
 
-int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
+static int update_hidden_ssid(u8 *ies, u32 ies_len, u8 hidden_ssid_mode)
 {
 	u8 *ssid_ie;
 	sint ssid_len_ori;
