@@ -21,7 +21,7 @@ jobs:
           # Fetch releases.json and extract all kernel versions >= 6.x
           curl -s https://www.kernel.org/releases.json > /tmp/releases.json
           
-          # Parse JSON and extract versions >= 6.x
+          # Parse JSON and extract versions
           versions=$(python3 << 'EOF'
           import json
           
@@ -31,10 +31,16 @@ jobs:
           versions = []
           for release in data.get('releases', []):
               version = release.get('version', '')
-              if version and version.startswith('6.'):
-                  # Add "v" prefix to version to create tag name
+              if not version:
+                  continue
+              # linux-next versions look like "next-YYYYMMDD": the git tag is the
+              # version verbatim (no "v" prefix) and lives in the linux-next tree.
+              # Numbered releases (6.12.93, 7.1, 7.2-rc1, ...) use a "v" prefix.
+              if version.startswith('next-'):
+                  tag = version
+              else:
                   tag = 'v' + version
-                  versions.append(tag)
+              versions.append(tag)
           
           # Create matrix JSON
           matrix = {'kernel_version': versions}
@@ -78,10 +84,20 @@ jobs:
       - name: Setup kernel source
         run: |
           echo "Setting up kernel source for version ${{ matrix.kernel_version }}"
-          # Clone or checkout the Linux kernel at the specified tag/version
-          if [ ! -d /tmp/linux-${{ matrix.kernel_version }} ]; then
-            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git /tmp/linux-${{ matrix.kernel_version }} || \
-            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git /tmp/linux-${{ matrix.kernel_version }}
+          TAG="${{ matrix.kernel_version }}"
+          DEST="/tmp/linux-$TAG"
+          # Clone the Linux kernel at the given tag. linux-next tags (next-YYYYMMDD)
+          # live in the linux-next tree; everything else is a stable/mainline tag.
+          if [ ! -d "$DEST" ]; then
+            case "$TAG" in
+              next-*)
+                git clone --depth 1 --branch "$TAG" https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git "$DEST"
+                ;;
+              *)
+                git clone --depth 1 --branch "$TAG" https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git "$DEST" || \
+                git clone --depth 1 --branch "$TAG" https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git "$DEST"
+                ;;
+            esac
           fi
           
       - name: Prepare kernel build environment
