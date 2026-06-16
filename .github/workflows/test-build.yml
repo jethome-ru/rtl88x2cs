@@ -121,8 +121,31 @@ jobs:
       - name: Build module
         run: |
           echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }}"
-          # Build only compilation, skip linking to avoid undefined symbol errors
-          make KSRC=/tmp/linux-${{ matrix.kernel_version }} KBUILD_MODPOST_WARN=1
+          LOG="/tmp/build-${{ matrix.kernel_version }}.log"
+          # KCFLAGS=-Werror: warnings are fatal, so the step fails (gate) on the issues
+          #   we care about (missing-prototypes, unused-function, incompatible-pointer-
+          #   types, ...) instead of building "green" with warnings.
+          # -k (keep-going): compile every file even after an error, so the by-type
+          #   tally below is COMPLETE (without it the build stops at the first file).
+          # KBUILD_MODPOST_WARN=1: expected undefined-symbol modpost notes stay warnings.
+          set -o pipefail
+          rc=0
+          make -k KSRC=/tmp/linux-${{ matrix.kernel_version }} \
+               KBUILD_MODPOST_WARN=1 KCFLAGS=-Werror 2>&1 | tee "$LOG" || rc=$?
+
+          # Count diagnostics by type (gcc prints the class in brackets, e.g.
+          # [-Werror=missing-prototypes]). Pure shell, no extra tooling.
+          echo "### ${{ matrix.kernel_version }} — diagnostics by type" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          grep -hoE '\[-W[A-Za-z0-9=_+-]+\]' "$LOG" \
+            | sed -E 's/^\[-W(error=)?//; s/\]$//' \
+            | sort | uniq -c | sort -rn \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+          total=$(grep -c ': error:' "$LOG" || true)
+          echo "error: lines (hard compile errors): ${total:-0}" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          exit $rc
         env:
           ARCH: x86_64
       
