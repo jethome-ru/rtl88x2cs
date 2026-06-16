@@ -103,18 +103,24 @@ jobs:
       - name: Prepare kernel build environment
         run: |
           cd /tmp/linux-${{ matrix.kernel_version }}
-          # Use existing config or create a minimal config
-          if [ -f /boot/config-$(uname -r) ]; then
-            cp /boot/config-$(uname -r) .config
-          else
-            make defconfig
-          fi
-          # Disable certificate-related options that require Ubuntu-specific files
+          # Use the arch default config (x86_64_defconfig on the x64 runner), NOT the
+          # runner's distro /boot/config. The arch defconfig sets CONFIG_WERROR=y — the
+          # same condition the Buildroot x86 autobuilder hits — so the module build
+          # inherits a real -Werror and the CI actually gates on the driver's warnings.
+          make defconfig
+          # Enable the kernel options the rtl8822cs module needs so the out-of-tree
+          # build sees complete headers (mirrors Buildroot rtl8822cs.mk CONFIG fixups).
+          scripts/config --enable NET
+          scripts/config --enable WIRELESS
+          scripts/config --enable CFG80211
+          scripts/config --enable MAC80211
+          scripts/config --enable MMC
+          # Disable certificate-related options that require distro-specific files
           scripts/config --disable SYSTEM_TRUSTED_KEYS
           scripts/config --disable SYSTEM_REVOCATION_KEYS
           scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
           scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
-          # Prepare kernel for module builds
+          # Reconcile and prepare for external module builds
           make olddefconfig
           make modules_prepare
           
