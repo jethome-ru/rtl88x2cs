@@ -2514,6 +2514,7 @@ static void _iqk_fail_count_8822c(
 	RF_DBG(dm, DBG_RF_IQK, "[IQK]All/Fail = %d %d\n", dm->n_iqk_cnt, dm->n_iqk_fail_cnt);
 }
 
+#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 static void _iqk_iqk_fail_report_8822c(
 	struct dm_struct *dm)
 {
@@ -2537,6 +2538,7 @@ static void _iqk_iqk_fail_report_8822c(
 #endif
 	}
 }
+#endif
 
 static void _iqk_backup_mac_bb_8822c(
 	struct dm_struct *dm,
