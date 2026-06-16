@@ -18,6 +18,7 @@
 #include <hal_data.h>		/* HAL_DATA_TYPE */
 #include "../../hal_halmac.h"	/* rtw_halmac_query_tx_page_num() */
 #include "../rtl8822c.h"	/* rtl8822c_hal_init(), rtl8822c_phy_init_haldm() and etc. */
+#include "rtl8822cs.h"		/* rtl8822cs_* prototypes */
 
 #ifdef CONFIG_FWLPS_IN_IPS
 static u8 fw_ips_leave(struct _ADAPTER *a)

@@ -18,6 +18,7 @@
 #include <hal_data.h>		/* HAL_DATA_TYPE */
 #include "../../hal_halmac.h"	/* rtw_halmac_sdio_tx_allowed() and etc. */
 #include "../rtl8822c.h"	/* rtl8822c_update_txdesc() and etc. */
+#include "rtl8822cs.h"		/* rtl8822cs_* prototypes */
 
 
 static s32 dequeue_writeport(PADAPTER adapter)
