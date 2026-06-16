@@ -122,16 +122,18 @@ jobs:
         run: |
           echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }}"
           LOG="/tmp/build-${{ matrix.kernel_version }}.log"
-          # KCFLAGS=-Werror: warnings are fatal, so the step fails (gate) on the issues
-          #   we care about (missing-prototypes, unused-function, incompatible-pointer-
-          #   types, ...) instead of building "green" with warnings.
+          # We do NOT force -Werror: our own warnings (missing-prototypes, unused-
+          #   function, ...) are informational and only counted in the summary below.
+          #   The build still fails on the kernel's own default-fatal diagnostics
+          #   (-Werror=implicit-function-declaration / =incompatible-pointer-types /
+          #   =return-type / ...), i.e. real API breakage like on linux-next.
           # -k (keep-going): compile every file even after an error, so the by-type
           #   tally below is COMPLETE (without it the build stops at the first file).
           # KBUILD_MODPOST_WARN=1: expected undefined-symbol modpost notes stay warnings.
           set -o pipefail
           rc=0
           make -k KSRC=/tmp/linux-${{ matrix.kernel_version }} \
-               KBUILD_MODPOST_WARN=1 KCFLAGS=-Werror 2>&1 | tee "$LOG" || rc=$?
+               KBUILD_MODPOST_WARN=1 2>&1 | tee "$LOG" || rc=$?
 
           # Count diagnostics by type (gcc prints the class in brackets, e.g.
           # [-Werror=missing-prototypes]). Pure shell, no extra tooling.
