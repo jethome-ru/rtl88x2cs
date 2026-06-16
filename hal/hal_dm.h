@@ -115,4 +115,5 @@ void rtw_phydm_pwr_tracking_directly(_adapter *adapter);
 void rtw_phydm_trx_cfg(_adapter *adapter, bool tx_1ss);
 #endif
 int rtw_phydm_rfe_ctrl_gpio(_adapter *adapter, u8 gpio_num);
+void record_ra_info(void *p_dm_void, u8 macid, struct cmn_sta_info *p_sta, u64 ra_mask);
 #endif /* __HAL_DM_H__ */

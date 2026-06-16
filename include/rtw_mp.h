@@ -933,6 +933,7 @@ int rtw_mp_lck(struct net_device *dev,
 int rtw_mp_get_tsside(struct net_device *dev,
 		struct iw_request_info *info,
 		struct iw_point *wrqu, char *extra);
+u8 MgntQuery_NssTxRate(u16 Rate);
 int rtw_mp_set_tsside(struct net_device *dev,
 		struct iw_request_info *info,
 		struct iw_point *wrqu, char *extra);

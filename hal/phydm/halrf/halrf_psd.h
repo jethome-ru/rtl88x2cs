@@ -47,4 +47,7 @@ halrf_psd_init_query(
 	u32 average,
 	u32 buf_size);
 
+struct dm_struct;
+void halrf_psd(struct dm_struct *dm, u32 point, u32 start_point, u32 stop_point, u32 average);
+
 #endif /*#__HALRF_PSD_H__*/
