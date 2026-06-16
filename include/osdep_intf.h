@@ -81,6 +81,13 @@ int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
 
 int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname);
 struct net_device *rtw_init_netdev(_adapter *padapter);
+int rtw_change_ifname(_adapter *padapter, const char *ifname);
+
+int pm_netdev_open(struct net_device *pnetdev, u8 bnormal);
+int pm_netdev_close(struct net_device *pnetdev, u8 bnormal);
+#ifdef CONFIG_BR_EXT
+void netdev_br_init(struct net_device *netdev);
+#endif
 
 void rtw_os_ndev_free(_adapter *adapter);
 int rtw_os_ndev_init(_adapter *adapter, const char *name);
