@@ -21,7 +21,7 @@ jobs:
           # Fetch releases.json and extract all kernel versions >= 6.x
           curl -s https://www.kernel.org/releases.json > /tmp/releases.json
           
-          # Parse JSON and extract versions >= 6.x
+          # Parse JSON and extract versions
           versions=$(python3 << 'EOF'
           import json
           
@@ -31,10 +31,16 @@ jobs:
           versions = []
           for release in data.get('releases', []):
               version = release.get('version', '')
-              if version and version.startswith('6.'):
-                  # Add "v" prefix to version to create tag name
+              if not version:
+                  continue
+              # linux-next versions look like "next-YYYYMMDD": the git tag is the
+              # version verbatim (no "v" prefix) and lives in the linux-next tree.
+              # Numbered releases (6.12.93, 7.1, 7.2-rc1, ...) use a "v" prefix.
+              if version.startswith('next-'):
+                  tag = version
+              else:
                   tag = 'v' + version
-                  versions.append(tag)
+              versions.append(tag)
           
           # Create matrix JSON
           matrix = {'kernel_version': versions}
@@ -78,35 +84,76 @@ jobs:
       - name: Setup kernel source
         run: |
           echo "Setting up kernel source for version ${{ matrix.kernel_version }}"
-          # Clone or checkout the Linux kernel at the specified tag/version
-          if [ ! -d /tmp/linux-${{ matrix.kernel_version }} ]; then
-            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git /tmp/linux-${{ matrix.kernel_version }} || \
-            git clone --depth 1 --branch ${{ matrix.kernel_version }} https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git /tmp/linux-${{ matrix.kernel_version }}
+          TAG="${{ matrix.kernel_version }}"
+          DEST="/tmp/linux-$TAG"
+          # Clone the Linux kernel at the given tag. linux-next tags (next-YYYYMMDD)
+          # live in the linux-next tree; everything else is a stable/mainline tag.
+          if [ ! -d "$DEST" ]; then
+            case "$TAG" in
+              next-*)
+                git clone --depth 1 --branch "$TAG" https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git "$DEST"
+                ;;
+              *)
+                git clone --depth 1 --branch "$TAG" https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git "$DEST" || \
+                git clone --depth 1 --branch "$TAG" https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git "$DEST"
+                ;;
+            esac
           fi
           
       - name: Prepare kernel build environment
         run: |
           cd /tmp/linux-${{ matrix.kernel_version }}
-          # Use existing config or create a minimal config
-          if [ -f /boot/config-$(uname -r) ]; then
-            cp /boot/config-$(uname -r) .config
-          else
-            make defconfig
-          fi
-          # Disable certificate-related options that require Ubuntu-specific files
+          # Use the arch default config (x86_64_defconfig on the x64 runner), NOT the
+          # runner's distro /boot/config. The arch defconfig sets CONFIG_WERROR=y — the
+          # same condition the Buildroot x86 autobuilder hits — so the module build
+          # inherits a real -Werror and the CI actually gates on the driver's warnings.
+          make defconfig
+          # Enable the kernel options the rtl8822cs module needs so the out-of-tree
+          # build sees complete headers (mirrors Buildroot rtl8822cs.mk CONFIG fixups).
+          scripts/config --enable NET
+          scripts/config --enable WIRELESS
+          scripts/config --enable CFG80211
+          scripts/config --enable MAC80211
+          scripts/config --enable MMC
+          # Disable certificate-related options that require distro-specific files
           scripts/config --disable SYSTEM_TRUSTED_KEYS
           scripts/config --disable SYSTEM_REVOCATION_KEYS
           scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
           scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
-          # Prepare kernel for module builds
+          # Reconcile and prepare for external module builds
           make olddefconfig
           make modules_prepare
           
       - name: Build module
         run: |
           echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }}"
-          # Build only compilation, skip linking to avoid undefined symbol errors
-          make KSRC=/tmp/linux-${{ matrix.kernel_version }} KBUILD_MODPOST_WARN=1
+          LOG="/tmp/build-${{ matrix.kernel_version }}.log"
+          # We do NOT force -Werror: our own warnings (missing-prototypes, unused-
+          #   function, ...) are informational and only counted in the summary below.
+          #   The build still fails on the kernel's own default-fatal diagnostics
+          #   (-Werror=implicit-function-declaration / =incompatible-pointer-types /
+          #   =return-type / ...), i.e. real API breakage like on linux-next.
+          # -k (keep-going): compile every file even after an error, so the by-type
+          #   tally below is COMPLETE (without it the build stops at the first file).
+          # KBUILD_MODPOST_WARN=1: expected undefined-symbol modpost notes stay warnings.
+          set -o pipefail
+          rc=0
+          make -k KSRC=/tmp/linux-${{ matrix.kernel_version }} \
+               KBUILD_MODPOST_WARN=1 2>&1 | tee "$LOG" || rc=$?
+
+          # Count diagnostics by type (gcc prints the class in brackets, e.g.
+          # [-Werror=missing-prototypes]). Pure shell, no extra tooling.
+          echo "### ${{ matrix.kernel_version }} — diagnostics by type" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          grep -hoE '\[-W[A-Za-z0-9=_+-]+\]' "$LOG" \
+            | sed -E 's/^\[-W(error=)?//; s/\]$//' \
+            | sort | uniq -c | sort -rn \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+          total=$(grep -c ': error:' "$LOG" || true)
+          echo "error: lines (hard compile errors): ${total:-0}" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          exit $rc
         env:
           ARCH: x86_64
       
