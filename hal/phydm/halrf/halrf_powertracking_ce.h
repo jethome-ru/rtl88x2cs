@@ -327,4 +327,7 @@ void odm_txpowertracking_thermal_meter_check(
 
 #endif
 
+u8 get_swing_index(void *dm_void);
+u8 get_cck_swing_index(void *dm_void);
+
 #endif /*__HALRF_POWER_TRACKING_H__*/

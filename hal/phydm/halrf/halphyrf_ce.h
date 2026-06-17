@@ -120,4 +120,7 @@ u8 odm_get_right_chnl_place_for_iqk(u8 chnl);
 void phydm_rf_init(void *dm_void);
 void phydm_rf_watchdog(void *dm_void);
 
+struct dm_struct;
+void odm_iq_calibrate(struct dm_struct *dm);
+
 #endif /*__HALPHYRF_H__*/

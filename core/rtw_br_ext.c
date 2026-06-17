@@ -24,6 +24,7 @@
 
 #if 1	/* rtw_wifi_driver */
 	#include <drv_types.h>
+	#include <rtw_br_ext.h>
 #else	/* rtw_wifi_driver */
 	#include "./8192cd_cfg.h"
 

@@ -84,6 +84,9 @@ void iqk_info_rsvd_page_8822c(void *dm_void, u8 *buf, u32 *buf_size);
 void iqk_power_save_8822c(void *dm_void, boolean is_power_save);
 
 
+struct dm_struct;
+void _iq_calibrate_8822c_init(struct dm_struct *dm);
+
 #else /* (RTL8822C_SUPPORT == 0)*/
 
 #define phy_iq_calibrate_8822c(_pdm_void, clear, segment_iqk)

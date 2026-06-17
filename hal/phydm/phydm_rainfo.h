@@ -296,4 +296,5 @@ void phydm_ra_mask_watchdog(void *dm_void);
 void odm_refresh_basic_rate_mask(
 	void *dm_void);
 #endif
+void phydm_fw_fix_rate(void *dm_void, u8 en, u8 macid, u8 bw, u8 rate);
 #endif /*@#ifndef __PHYDMRAINFO_H__*/

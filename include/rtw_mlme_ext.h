@@ -1114,7 +1114,7 @@ struct rtw_cmd {
 #ifdef CONFIG_RTW_MESH
 extern u8 rtw_mesh_set_plink_state_cmd_hdl(_adapter *adapter, u8 *parmbuf);
 #else
-u8 rtw_mesh_set_plink_state_cmd_hdl(_adapter *adapter, u8 *parmbuf) { return H2C_CMD_FAIL; };
+static u8 rtw_mesh_set_plink_state_cmd_hdl(_adapter *adapter, u8 *parmbuf) { return H2C_CMD_FAIL; };
 #endif
 
 struct rtw_cmd wlancmds[] = {

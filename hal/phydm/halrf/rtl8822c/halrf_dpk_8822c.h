@@ -83,6 +83,8 @@ void dpk_c2h_report_transfer_8822c(
 	u8 	*buf,
 	u8	buf_size);
 
+void _dpk_get_coef_8822c(void *dm_void, u8 path);
+
 #endif /* RTL8822C_SUPPORT */
 
 #endif /*#ifndef __HALRF_DPK_8822C_H__*/

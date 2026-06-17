@@ -568,6 +568,7 @@ void rtw_wow_lps_level_decide(_adapter *adapter, u8 wow_en);
 #ifdef CONFIG_RESUME_IN_WORKQUEUE
 void rtw_resume_in_workqueue(struct pwrctrl_priv *pwrpriv);
 #endif /* CONFIG_RESUME_IN_WORKQUEUE */
+int rtw_resume_process(_adapter *padapter);
 
 #if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_ANDROID_POWER)
 bool rtw_is_earlysuspend_registered(struct pwrctrl_priv *pwrpriv);

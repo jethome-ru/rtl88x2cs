@@ -974,6 +974,9 @@ extern void rtw_free_assoc_resources(_adapter *adapter, u8 lock_scanned_queue);
 extern void rtw_indicate_disconnect(_adapter *adapter, u16 reason, u8 locally_generated);
 extern void rtw_indicate_connect(_adapter *adapter);
 void rtw_indicate_scan_done(_adapter *padapter, bool aborted);
+void indicate_wx_scan_complete_event(_adapter *padapter);
+void rtw_indicate_wx_assoc_event(_adapter *padapter);
+void rtw_indicate_wx_disassoc_event(_adapter *padapter);
 
 void rtw_drv_scan_by_self(_adapter *padapter, u8 reason);
 void rtw_scan_wait_completed(_adapter *adapter);
