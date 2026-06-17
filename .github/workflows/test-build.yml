@@ -61,8 +61,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-        with:
-          ref: tune_for_jethub
       
       - name: Install build dependencies
         run: |
