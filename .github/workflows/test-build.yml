@@ -141,12 +141,17 @@ jobs:
 
           # Count diagnostics by type (gcc prints the class in brackets, e.g.
           # [-Werror=missing-prototypes]). Pure shell, no extra tooling.
+          # NOTE: trailing '|| true' — a CLEAN build has zero [-W...] matches, so grep
+          # exits 1; under 'set -e -o pipefail' that would fail an otherwise green
+          # build. '|| true' on the whole pipeline keeps clean == green. (It must be on
+          # the pipeline tail: '{ grep || true; } | ...' does NOT work — pipefail still
+          # surfaces grep's 1 from inside the group.)
           echo "### ${{ matrix.kernel_version }} — diagnostics by type" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           grep -hoE '\[-W[A-Za-z0-9=_+-]+\]' "$LOG" \
             | sed -E 's/^\[-W(error=)?//; s/\]$//' \
             | sort | uniq -c | sort -rn \
-            | tee -a "$GITHUB_STEP_SUMMARY"
+            | tee -a "$GITHUB_STEP_SUMMARY" || true
           total=$(grep -c ': error:' "$LOG" || true)
           echo "error: lines (hard compile errors): ${total:-0}" | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
