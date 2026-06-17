@@ -4154,7 +4154,7 @@ struct btinfo {
 	u8 rsvd_7;
 };
 
-static void btinfo_evt_dump(void *sel, void *buf)
+static void __maybe_unused btinfo_evt_dump(void *sel, void *buf)
 {
 	struct btinfo *info = (struct btinfo *)buf;
 
@@ -5462,7 +5462,7 @@ exit:
 
 }
 
-static void rtw_getrttbl_cmd_cmdrsp_callback(_adapter	*padapter,  struct cmd_obj *pcmd)
+static void __maybe_unused rtw_getrttbl_cmd_cmdrsp_callback(_adapter	*padapter,  struct cmd_obj *pcmd)
 {
 
 	rtw_free_cmd_obj(pcmd);

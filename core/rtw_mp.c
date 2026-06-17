@@ -1179,7 +1179,7 @@ int SetTxPower(PADAPTER pAdapter)
 	return _TRUE;
 }
 
-static void SetTxAGCOffset(PADAPTER pAdapter, u32 ulTxAGCOffset)
+static void __maybe_unused SetTxAGCOffset(PADAPTER pAdapter, u32 ulTxAGCOffset)
 {
 	u32 TxAGCOffset_B, TxAGCOffset_C, TxAGCOffset_D, tmpAGC;
 

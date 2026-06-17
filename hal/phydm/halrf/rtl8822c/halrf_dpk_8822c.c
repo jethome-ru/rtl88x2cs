@@ -394,7 +394,7 @@ static void _dpk_manual_txagc_8822c(
 	odm_set_bb_reg(dm, R_0x41a4, BIT(7), is_manual);
 }
 
-static void _dpk_set_txagc_8822c(
+static void __maybe_unused _dpk_set_txagc_8822c(
 	struct dm_struct *dm)
 {
 	odm_set_bb_reg(dm, R_0x18a0, 0x007C0000, 0x1f);
@@ -1248,7 +1248,7 @@ static void _dpk_coef1_read_8822c(
 	odm_set_bb_reg(dm, 0x1b04 + path * 0x58, 0xf0000000, 0x0); /*disable manual coef*/
 }
 
-static void _dpk_coef_default_8822c(
+static void __maybe_unused _dpk_coef_default_8822c(
 	void *dm_void,
 	u8 path)
 {

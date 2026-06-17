@@ -2847,7 +2847,7 @@ int rtw_ap_set_wep_key(_adapter *padapter, u8 *key, u8 keylen, int keyid, u8 set
 	return rtw_ap_set_key(padapter, key, alg, keyid, set_tx);
 }
 
-static u8 rtw_ap_bmc_frames_hdl(_adapter *padapter)
+static u8 __maybe_unused rtw_ap_bmc_frames_hdl(_adapter *padapter)
 {
 #define HIQ_XMIT_COUNTS (6)
 	_irqL irqL;

@@ -152,7 +152,7 @@ static u8 _halrf_tssi_rate_to_driver_rate_8822c(
 	return driver_rate;
 }
 
-static void _halrf_calculate_txagc_codeword_8822c(
+static void __maybe_unused _halrf_calculate_txagc_codeword_8822c(
 	void *dm_void, u16 *tssi_value,  s16 *txagc_value)
 {
 #if 0
@@ -232,7 +232,7 @@ static u32 _halrf_get_efuse_tssi_offset_8822c(
 	return offset;
 }
 
-static s8 _halrf_get_kfree_tssi_offset_8822c(
+static s8 __maybe_unused _halrf_get_kfree_tssi_offset_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -590,7 +590,7 @@ static void _halrf_calculate_set_thermal_codeword_8822c(
 		odm_set_bb_reg(dm, R_0x1c20, 0x03f00000, 0x0);
 }
 
-static void _halrf_set_txagc_codeword_8822c(
+static void __maybe_unused _halrf_set_txagc_codeword_8822c(
 	void *dm_void, s16 *tssi_value)
 {
 #if 0
@@ -634,7 +634,7 @@ void halrf_set_tssi_codeword_8822c(
 	}
 }
 
-static void _halrf_set_efuse_kfree_offset_8822c(
+static void __maybe_unused _halrf_set_efuse_kfree_offset_8822c(
 	void *dm_void)
 {
 #if 0
@@ -1165,7 +1165,7 @@ static void _halrf_tssi_scan_8822c(
 	}
 }
 
-static void _halrf_thermal_init_8822c(
+static void __maybe_unused _halrf_thermal_init_8822c(
 	void *dm_void)
 {
 #if 0

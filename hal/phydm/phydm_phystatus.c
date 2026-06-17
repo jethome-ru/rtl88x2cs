@@ -1852,7 +1852,7 @@ static void phydm_print_phystat_jgr3(struct dm_struct *dm, u8 *phy_sts,
 	}
 }
 
-static void phydm_reset_phy_info_jgr3(struct dm_struct *phydm,
+static void __maybe_unused phydm_reset_phy_info_jgr3(struct dm_struct *phydm,
 			       struct phydm_phyinfo_struct *phy_info)
 {
 	u8 i;
