@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 #include "drv_types.h"
+#include <custom_gpio.h>
 
 #ifdef CONFIG_PLATFORM_SPRD
 

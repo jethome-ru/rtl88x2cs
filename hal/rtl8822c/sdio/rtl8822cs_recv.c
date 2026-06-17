@@ -18,6 +18,7 @@
 #include <hal_data.h>		/* HAL_DATA_TYPE */
 #include "../../hal_halmac.h"	/* BIT_ACRC32_8822C and etc. */
 #include "../rtl8822c.h"	/* rtl8822c_rxdesc2attribute(), rtl8822c_c2h_handler_no_io() */
+#include "rtl8822cs.h"		/* rtl8822cs_* prototypes */
 
 
 static s32 initrecvbuf(struct recv_buf *precvbuf, PADAPTER adapter)
