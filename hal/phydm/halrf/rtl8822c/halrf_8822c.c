@@ -1400,7 +1400,7 @@ void halrf_rxdck_8822c(void *dm_void)
 	odm_set_rf_reg(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK, 0x3ffff);
 	odm_set_rf_reg(dm, RF_PATH_B, 0x0, RFREGOFFSETMASK, 0x3ffff);
 }
-static void _phy_x2_calibrate_8822c(struct dm_struct *dm)
+static void __maybe_unused _phy_x2_calibrate_8822c(struct dm_struct *dm)
 {
 	RF_DBG(dm, DBG_RF_IQK, "[X2K]X2K start!!!!!!!\n");
 	/*X2K*/
@@ -1505,7 +1505,7 @@ boolean _phy_query_rf_path_switch_8822c(void *adapter)
 }
 
 #if ((DM_ODM_SUPPORT_TYPE & ODM_AP) || (DM_ODM_SUPPORT_TYPE == ODM_CE))
-static boolean phy_query_rf_path_switch_8822c(struct dm_struct *dm)
+static boolean __maybe_unused phy_query_rf_path_switch_8822c(struct dm_struct *dm)
 #else
 boolean phy_query_rf_path_switch_8822c(void *adapter)
 #endif

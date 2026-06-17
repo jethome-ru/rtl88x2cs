@@ -17,7 +17,7 @@
 #include <hal_data.h>
 
 /* A mapping from HalData to ODM. */
-static enum odm_board_type boardType(u8 InterfaceSel)
+static enum odm_board_type __maybe_unused boardType(u8 InterfaceSel)
 {
 	enum odm_board_type        board	= ODM_BOARD_DEFAULT;
 

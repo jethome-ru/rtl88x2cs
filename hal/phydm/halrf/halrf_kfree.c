@@ -565,7 +565,7 @@ static void phydm_set_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
 			      BIT(15) | BIT(14))), e_rf_path);
 }
 
-static void phydm_clear_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
+static void __maybe_unused phydm_clear_kfree_to_rf_8710b(void *dm_void, u8 e_rf_path, u8 data)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	u32 gain_bmask = (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14));
@@ -2089,7 +2089,7 @@ static void phydm_get_set_power_trim_offset_8721d(void *dm_void)
 	}
 }
 
-static void phydm_get_set_pa_bias_offset_8721d(void *dm_void)
+static void __maybe_unused phydm_get_set_pa_bias_offset_8721d(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct odm_power_trim_data *power_trim_info = &dm->power_trim_data;

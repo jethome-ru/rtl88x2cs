@@ -259,7 +259,7 @@ static void halrf_iqk_xym_show(struct dm_struct *dm, u8 xym_type)
 	}
 }
 
-static void halrf_iqk_xym_dump(void *dm_void)
+static void __maybe_unused halrf_iqk_xym_dump(void *dm_void)
 {
 	u32 tmp1, tmp2;
 	struct dm_struct *dm = (struct dm_struct *)dm_void;

@@ -2006,7 +2006,7 @@ static void _reset_beamformee_mu(PADAPTER adapter, struct beamformee_entry *bfee
 	RTW_INFO("%s: Clear MU BFee entry(%d) HW setting\n", __FUNCTION__, idx);
 }
 
-static void rtl8822c_phy_bf_reset_all(PADAPTER adapter)
+static void __maybe_unused rtl8822c_phy_bf_reset_all(PADAPTER adapter)
 {
 	struct beamforming_info *info;
 	u8 i, val8;

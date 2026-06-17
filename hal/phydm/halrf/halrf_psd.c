@@ -214,7 +214,7 @@ void halrf_psd(
 		odm_set_bb_reg(dm, psd_reg, 0x3000, avg_org);
 }
 
-static void backup_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
+static void __maybe_unused backup_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
 {
 	u32 i ;
 
@@ -222,7 +222,7 @@ static void backup_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup
 		bb_backup[i] = odm_get_bb_reg(dm, backup_bb_reg[i], MASKDWORD);
 }
 
-static void restore_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
+static void __maybe_unused restore_bb_register(struct dm_struct *dm, u32 *bb_backup, u32 *backup_bb_reg, u32 counter)
 {
 	u32 i ;
 

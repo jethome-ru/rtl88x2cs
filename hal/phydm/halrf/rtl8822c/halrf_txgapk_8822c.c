@@ -657,7 +657,7 @@ static void _halrf_txgapk_write_tx_gain_8822c(
 	}
 }
 
-static void _halrf_txgapk_disable_power_trim_8822c(
+static void __maybe_unused _halrf_txgapk_disable_power_trim_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -672,7 +672,7 @@ static void _halrf_txgapk_disable_power_trim_8822c(
 
 }
 
-static void _halrf_txgapk_enable_power_trim_8822c(
+static void __maybe_unused _halrf_txgapk_enable_power_trim_8822c(
 	void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;

@@ -1715,7 +1715,7 @@ u8 phydm_phystat_rpt_jgr3(void *dm_void, enum phystat_rpt info,
 	return return_info;
 }
 
-static void phydm_ex_hal8814b_wifi_only_hw_config(void *dm_void)
+static void __maybe_unused phydm_ex_hal8814b_wifi_only_hw_config(void *dm_void)
 {
 	/*BB control*/
 	/*halwifionly_phy_set_bb_reg(pwifionlycfg, 0x4c, 0x01800000, 0x2);*/

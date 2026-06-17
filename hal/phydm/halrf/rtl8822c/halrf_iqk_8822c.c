@@ -80,7 +80,7 @@ _iqk_check_cal_8822c(
 	return false;
 }
 
-static void _iqk_idft(struct dm_struct *dm)
+static void __maybe_unused _iqk_idft(struct dm_struct *dm)
 {
 
 	odm_write_4byte(dm, 0x1b00, 0x8);
@@ -100,7 +100,7 @@ static void _iqk_idft(struct dm_struct *dm)
 	odm_set_bb_reg(dm, R_0x1b20, BIT(31) | BIT(30), 0x0);	
 }
 
-static void _iqk_rx_cfir_check_8822c(struct dm_struct *dm, u8 t)
+static void __maybe_unused _iqk_rx_cfir_check_8822c(struct dm_struct *dm, u8 t)
 {
 	struct dm_iqk_info *iqk_info = &dm->IQK_info;
 	u8 j;
@@ -132,7 +132,7 @@ static void _iqk_rx_cfir_check_8822c(struct dm_struct *dm, u8 t)
 }
 
 
-static void _iqk_get_rxcfir_8822c(void *dm_void, u8 path, u8 t)
+static void __maybe_unused _iqk_get_rxcfir_8822c(void *dm_void, u8 path, u8 t)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_iqk_info *iqk_info = &dm->IQK_info;
@@ -166,7 +166,7 @@ static void _iqk_get_rxcfir_8822c(void *dm_void, u8 path, u8 t)
 //	odm_set_bb_reg(dm, R_0x1bd8, MASKDWORD, 0x0);
 }
 
-static void _iqk_reload_rxcfir_8822c(struct dm_struct *dm, u8 path)
+static void __maybe_unused _iqk_reload_rxcfir_8822c(struct dm_struct *dm, u8 path)
 {
 	struct dm_iqk_info *iqk_info = &dm->IQK_info;
 #if 1
@@ -212,7 +212,7 @@ static void _iqk_reload_rxcfir_8822c(struct dm_struct *dm, u8 path)
 #endif
 }
 
-static void _iqk_rx_cfir_8822c(struct dm_struct *dm, u8 path)
+static void __maybe_unused _iqk_rx_cfir_8822c(struct dm_struct *dm, u8 path)
 {
 
 	u32 xym_tmp[6], cfir_tmp[3];
@@ -237,7 +237,7 @@ static void _iqk_rx_cfir_8822c(struct dm_struct *dm, u8 path)
 		path, cfir_tmp[0], cfir_tmp[1], cfir_tmp[2]);
 }
 
-static void _iqk_tx_cfir_8822c(struct dm_struct *dm, u8 path)
+static void __maybe_unused _iqk_tx_cfir_8822c(struct dm_struct *dm, u8 path)
 {
 	u32 xym_tmp[6], cfir_tmp[3];
 	u32 i;
@@ -281,7 +281,7 @@ static u8 _iqk_get_efuse_thermal_8822c(
 
 
 /*---------------------------Define Local Constant---------------------------*/
-static void phydm_get_read_counter_8822c(struct dm_struct *dm)
+static void __maybe_unused phydm_get_read_counter_8822c(struct dm_struct *dm)
 {
 	u32 counter = 0x0;
 
@@ -420,7 +420,7 @@ static void _iqk_information_8822c(
 }
 
 
-static boolean _iqk_xym_read_8822c(struct dm_struct *dm, u8 path)
+static boolean __maybe_unused _iqk_xym_read_8822c(struct dm_struct *dm, u8 path)
 {
 	u32 i = 0x0;
 	u32 xym = 0x0;
@@ -546,7 +546,7 @@ static void _iqk_set_gnt_wl_high_8822c(struct dm_struct *dm)
 	//_iqk_btc_write_indirect_reg_8822c(dm, 0x38, 0x0300, val); /*0x38[9:8]*/
 }
 
-static void _iqk_set_gnt_bt_low_8822c(struct dm_struct *dm)
+static void __maybe_unused _iqk_set_gnt_bt_low_8822c(struct dm_struct *dm)
 {
 	u32 val = 0;
 	u8 state = 0x0, sw_control = 0x1;
@@ -571,7 +571,7 @@ static void _iqk_set_gnt_wl_gnt_bt_8822c(struct dm_struct *dm, boolean beforeK)
 
 
 
-static void _iqk_nctl_8822c(struct dm_struct *dm)
+static void __maybe_unused _iqk_nctl_8822c(struct dm_struct *dm)
 {
 	RF_DBG(dm, DBG_RF_IQK, "[IQK]==========IQK NCTL!!!!!========\n");
 	//odm_write_4byte(dm 0x1CD0, 0x7 [31:28]);	
@@ -2418,7 +2418,7 @@ static void _iqk_cal_path_off_8822c(struct dm_struct *dm)
 	}
 }
 
-static void _iqk_con_tx_8822c(
+static void __maybe_unused _iqk_con_tx_8822c(
 	struct dm_struct *dm,
 	boolean is_contx)
 {
@@ -2459,7 +2459,7 @@ static void _iqk_rf_set_check_8822c(
 	}
 }
 
-static void _iqk_rf0xb0_workaround_8822c(
+static void __maybe_unused _iqk_rf0xb0_workaround_8822c(
 	struct dm_struct *dm)
 {
 	/*add 0xb8 control for the bad phase noise after switching channel*/
@@ -2589,7 +2589,7 @@ static void _iqk_agc_bnd_int_8822c(
 #endif
 }
 
-static void _iqk_bb_reset_8822c(
+static void __maybe_unused _iqk_bb_reset_8822c(
 	struct dm_struct *dm)
 {
 	boolean cca_ing = false;
@@ -2647,7 +2647,7 @@ static void _iqk_bb_for_dpk_setting_8822c(struct dm_struct *dm)
 	RF_DBG(dm, DBG_RF_IQK, "[IQK]_iqk_bb_for_dpk_setting_8822c!!!!\n");
 }
 
-static void _iqk_rf_setting_8822c(struct dm_struct *dm)
+static void __maybe_unused _iqk_rf_setting_8822c(struct dm_struct *dm)
 {	
 	odm_set_bb_reg(dm, 0x1bb8, BIT(20), 0x0);
 	/*TxIQK mode S0,RF0x00[19:16]=0x4*/
@@ -2696,7 +2696,7 @@ static void _iqk_rf_setting_8822c(struct dm_struct *dm)
 	RF_DBG(dm, DBG_RF_IQK, "[IQK]_iqk_rf_setting_8822c RF01!!!!\n");
 }
 
-static void _iqk_set_afe_8822c(struct dm_struct *dm)
+static void __maybe_unused _iqk_set_afe_8822c(struct dm_struct *dm)
 {
 	odm_set_bb_reg(dm, 0x1830, BIT(30), 0x0);
 	odm_set_bb_reg(dm, 0x1860, 0xfffff000, 0xf0001);
@@ -3067,7 +3067,7 @@ _iqk_reload_iqk_8822c(
 	return iqk_info->is_reload;
 }
 
-static void _iqk_rfe_setting_8822c(
+static void __maybe_unused _iqk_rfe_setting_8822c(
 	struct dm_struct *dm,
 	boolean ext_pa_on)
 {
@@ -3098,7 +3098,7 @@ static void _iqk_rfe_setting_8822c(
 #endif
 }
 
-static void _iqk_setrf_bypath_8822c(
+static void __maybe_unused _iqk_setrf_bypath_8822c(
 	struct dm_struct *dm)
 {
 	u8 path;
@@ -3132,7 +3132,7 @@ static void _iqk_rf_direct_access_8822c(
 	*/
 }
 
-static void _iqk_bbtx_path_8822c(
+static void __maybe_unused _iqk_bbtx_path_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -3152,7 +3152,7 @@ static void _iqk_bbtx_path_8822c(
 	odm_set_bb_reg(dm, 0x824, 0xf0000, temp2);
 }
 
-static void _iqk_iqk_mode_8822c(
+static void __maybe_unused _iqk_iqk_mode_8822c(
 	struct dm_struct *dm,
 	boolean is_iqkmode)
 {
@@ -3268,7 +3268,7 @@ static void _iqk_lok_setting_8822c(
 		odm_set_bb_reg(dm, 0x1b2c, 0xfff, 0x38);
 }
 
-static void _iqk_reload_lok_setting_8822c(
+static void __maybe_unused _iqk_reload_lok_setting_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -3495,7 +3495,7 @@ static void _iqk_rxk2_setting_8822c(
 
 
 static void
-_iqk_set_lok_lut_8822c(
+__maybe_unused _iqk_set_lok_lut_8822c(
 	struct dm_struct *dm,
 	u8 path)
 {
@@ -3979,7 +3979,7 @@ static void _iqk_lok_tune_8822c(void *dm_void, u8 path)
 }
 
 static boolean
-_lok_load_default_8822c(void *dm_void, u8 path)
+__maybe_unused _lok_load_default_8822c(void *dm_void, u8 path)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_iqk_info *iqk_info = &dm->IQK_info;
@@ -4223,7 +4223,7 @@ static void _iqk_iqk_by_path_8822c(
 
 }
 
-static void _iqk_dpd_in_sel(
+static void __maybe_unused _iqk_dpd_in_sel(
 	struct dm_struct *dm,
 	u8 input)
 {
@@ -4388,7 +4388,7 @@ static u32 _iqk_tximr_selfcheck_8822c(
 	return tximr;
 }
 
-static void _iqk_start_tximr_test_8822c(
+static void __maybe_unused _iqk_start_tximr_test_8822c(
 	struct dm_struct *dm,
 	u8 imr_limit)
 {
@@ -4628,7 +4628,7 @@ static void _iqk_start_rximr_test_8822c(
 		_iqk_rximr_test_8822c(dm, path, imr_limit);
 }
 
-static void _iqk_start_imr_test_8822c(
+static void __maybe_unused _iqk_start_imr_test_8822c(
 	void *dm_void)
 {
 	u8 imr_limit;
@@ -4909,7 +4909,7 @@ void iqk_set_cfir_8822c(void *dm_void, u8 idx, u8 path, boolean debug)
 }
 
 
-static void iqk_clean_cfir_8822c(void *dm_void, u8 mode, u8 path)
+static void __maybe_unused iqk_clean_cfir_8822c(void *dm_void, u8 mode, u8 path)
 {	
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 	struct dm_iqk_info *iqk_info = &dm->IQK_info;	
