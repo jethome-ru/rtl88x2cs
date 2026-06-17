@@ -234,6 +234,7 @@ static void phydm_fa_threshold_check(void *dm_void, boolean is_dfs_band)
 		  dig_t->fa_th[1], dig_t->fa_th[2]);
 }
 
+#if (RTL8822B_SUPPORT || RTL8197F_SUPPORT || RTL8192F_SUPPORT)
 static void phydm_set_big_jump_step(void *dm_void, u8 curr_igi)
 {
 #if (RTL8822B_SUPPORT || RTL8197F_SUPPORT || RTL8192F_SUPPORT)
@@ -264,6 +265,7 @@ static void phydm_set_big_jump_step(void *dm_void, u8 curr_igi)
 		  dig_t->big_jump_step1, big_jump_lmt);
 #endif
 }
+#endif /* (RTL8822B_SUPPORT || RTL8197F_SUPPORT || RTL8192F_SUPPORT) */
 
 #ifdef PHYDM_IC_JGR3_SERIES_SUPPORT
 static void phydm_write_dig_reg_jgr3(void *dm_void, u8 igi)
@@ -1235,6 +1237,7 @@ static void phydm_false_alarm_counter_reg_reset(void *dm_void)
 #endif /* @#if (ODM_IC_11AC_SERIES_SUPPORT) */
 }
 
+#if (ODM_IC_11N_SERIES_SUPPORT)
 static void phydm_false_alarm_counter_reg_hold(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
@@ -1255,6 +1258,7 @@ static void phydm_false_alarm_counter_reg_hold(void *dm_void)
 		odm_set_bb_reg(dm, R_0xa2c, BIT(14), 1);
 	}
 }
+#endif /* (ODM_IC_11N_SERIES_SUPPORT) */
 
 #if (ODM_IC_11N_SERIES_SUPPORT)
 void phydm_fa_cnt_statistics_n(void *dm_void)

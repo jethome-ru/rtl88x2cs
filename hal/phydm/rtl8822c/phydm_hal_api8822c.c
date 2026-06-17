@@ -101,6 +101,7 @@ static void phydm_bb_reset_8822c(struct dm_struct *dm)
 }
 
 __odm_func__
+#if CONFIG_POWERSAVING
 static void phydm_bb_reset_no_3wires_8822c(struct dm_struct *dm)
 {
 	/* Disable bbrstb 3-wires */
@@ -113,6 +114,7 @@ static void phydm_bb_reset_no_3wires_8822c(struct dm_struct *dm)
 	/* Enable bbrstb 3-wires */
 	odm_set_bb_reg(dm, R_0x1c90, BIT(8), 0x1);
 }
+#endif /* CONFIG_POWERSAVING */
 
 __odm_func__
 boolean phydm_chk_pkg_set_valid_8822c(struct dm_struct *dm,

@@ -389,6 +389,7 @@ static void phydm_avg_phystatus_init(void *dm_void)
 	#endif
 }
 
+#if (ODM_IC_11N_SERIES_SUPPORT)
 static u8 phydm_get_signal_quality(struct phydm_phyinfo_struct *phy_info,
 			    struct dm_struct *dm,
 			    struct phy_status_rpt_8192cd *phy_sts)
@@ -411,6 +412,7 @@ static u8 phydm_get_signal_quality(struct phydm_phyinfo_struct *phy_info,
 
 	return result;
 }
+#endif /* (ODM_IC_11N_SERIES_SUPPORT) */
 
 static u8 phydm_pw_2_percent(s8 ant_power)
 {
@@ -653,11 +655,13 @@ phydm_evm_2_percent(s8 value)
 	return (u8)ret_val;
 }
 
+#if (RTL8197F_SUPPORT)
 static s8 phydm_cck_rssi_convert(struct dm_struct *dm, u16 lna_idx, u8 vga_idx)
 {
 	/*@phydm_get_cck_rssi_table_from_reg*/
 	return (dm->cck_lna_gain_table[lna_idx] - (vga_idx << 1));
 }
+#endif /* (RTL8197F_SUPPORT) */
 
 void phydm_get_cck_rssi_table_from_reg(struct dm_struct *dm)
 {
@@ -1244,6 +1248,7 @@ void phydm_reset_rssi_for_dm(struct dm_struct *dm, u8 station_id)
 
 #if (ODM_IC_11N_SERIES_SUPPORT || ODM_IC_11AC_SERIES_SUPPORT)
 
+#if (RTL8814A_SUPPORT == 1)
 static s32 phydm_get_rssi_8814_ofdm(struct dm_struct *dm, u8 *rssi_in)
 {
 	s32 rssi_avg;
@@ -1289,6 +1294,7 @@ static s32 phydm_get_rssi_8814_ofdm(struct dm_struct *dm, u8 *rssi_in)
 
 	return rssi_avg;
 }
+#endif /* (RTL8814A_SUPPORT == 1) */
 
 static void phydm_process_rssi_for_dm(struct dm_struct *dm,
 			       struct phydm_phyinfo_struct *phy_info,

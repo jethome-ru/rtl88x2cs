@@ -32,6 +32,7 @@
 
 #ifdef PHYDM_AUTO_DEGBUG
 
+#if (ODM_IC_11N_SERIES_SUPPORT == 1)
 static void phydm_check_hang_reset(
 	void *dm_void)
 {
@@ -43,6 +44,7 @@ static void phydm_check_hang_reset(
 	phydm_pause_dm_watchdog(dm, PHYDM_RESUME);
 	dm->debug_components &= (~ODM_COMP_API);
 }
+#endif /* (ODM_IC_11N_SERIES_SUPPORT == 1) */
 
 static void phydm_check_hang_init(
 	void *dm_void)

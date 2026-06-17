@@ -106,6 +106,7 @@ void rtw_phydm_iqk_trigger(_adapter *adapter)
 }
 #endif
 
+#ifdef CONFIG_DBG_RF_CAL
 static void rtw_phydm_iqk_trigger_dbg(_adapter *adapter, bool recovery, bool clear, bool segment)
 {
 	struct dm_struct *p_dm_odm = adapter_to_phydm(adapter);
@@ -116,12 +117,15 @@ static void rtw_phydm_iqk_trigger_dbg(_adapter *adapter, bool recovery, bool cle
 		halrf_iqk_trigger(p_dm_odm, recovery);
 #endif
 }
+#endif /* CONFIG_DBG_RF_CAL */
+#ifdef CONFIG_DBG_RF_CAL
 static void rtw_phydm_lck_trigger(_adapter *adapter)
 {
 	struct dm_struct *p_dm_odm = adapter_to_phydm(adapter);
 
 	halrf_lck_trigger(p_dm_odm);
 }
+#endif /* CONFIG_DBG_RF_CAL */
 #ifdef CONFIG_DBG_RF_CAL
 void rtw_hal_iqk_test(_adapter *adapter, bool recovery, bool clear, bool segment)
 {
