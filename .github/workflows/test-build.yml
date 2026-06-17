@@ -120,7 +120,10 @@ jobs:
           scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
           # Reconcile and prepare for external module builds
           make olddefconfig
-          make modules_prepare
+          # Build the kernel fully so Module.symvers exists and the out-of-tree
+          # module's references to exported kernel symbols resolve (a
+          # modules_prepare-only tree has no symvers -> spurious modpost undefineds).
+          make -j"$(nproc)"
           
       - name: Build module
         run: |
