@@ -1175,6 +1175,7 @@ static void _dpk_coef_write_8822c(
 	}
 }
 
+#if DPK_COEF_DBG_8822C
 static void _dpk_coef1_read_8822c(
 	void *dm_void,
 	u8 path)
@@ -1247,6 +1248,7 @@ static void _dpk_coef1_read_8822c(
 
 	odm_set_bb_reg(dm, 0x1b04 + path * 0x58, 0xf0000000, 0x0); /*disable manual coef*/
 }
+#endif /* DPK_COEF_DBG_8822C */
 
 static void _dpk_coef_default_8822c(
 	void *dm_void,

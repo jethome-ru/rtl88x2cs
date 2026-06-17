@@ -406,6 +406,7 @@ static void phydm_config_trx_path_v2(void *dm_void, char input[][16], u32 *_used
 #endif
 }
 
+#if (RTL8192E_SUPPORT || RTL8812A_SUPPORT)
 static void phydm_config_trx_path_v1(void *dm_void, char input[][16], u32 *_used,
 			      char *output, u32 *_out_len)
 {
@@ -479,6 +480,7 @@ static void phydm_config_trx_path_v1(void *dm_void, char input[][16], u32 *_used
 	*_out_len = out_len;
 #endif
 }
+#endif /* (RTL8192E_SUPPORT || RTL8812A_SUPPORT) */
 
 void phydm_config_trx_path(void *dm_void, char input[][16], u32 *_used,
 			   char *output, u32 *_out_len)

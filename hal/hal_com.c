@@ -4958,6 +4958,7 @@ void rtw_hal_set_input_gpio(_adapter *padapter, u8 index)
 
 #endif
 
+#ifdef CONFIG_WOWLAN
 static void rtw_hal_set_FwAoacRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)
 {
 	struct	pwrctrl_priv *pwrpriv = adapter_to_pwrctl(padapter);
@@ -5019,6 +5020,7 @@ static void rtw_hal_set_FwAoacRsvdPage_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvd
 #endif /* CONFIG_PNO_SUPPORT */
 #endif /* CONFIG_WOWLAN */
 }
+#endif /* CONFIG_WOWLAN */
 
 #ifdef DBG_FW_DEBUG_MSG_PKT
 void rtw_hal_set_fw_dbg_msg_pkt_rsvd_page_cmd(PADAPTER padapter, PRSVDPAGE_LOC rsvdpageloc)

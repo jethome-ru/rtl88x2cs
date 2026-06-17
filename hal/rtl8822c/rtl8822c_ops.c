@@ -1361,6 +1361,7 @@ static void set_opmode_port1(PADAPTER adapter, u8 mode)
 #endif /* CONFIG_CONCURRENT_MODE */
 }
 #endif /* !CONFIG_MI_WITH_MBSSID_CAM */
+#ifdef DBG_TSF_MONITOR
 static void hw_tsf_reset(_adapter *adapter)
 {
 	u8 hw_port = rtw_hal_get_port(adapter);
@@ -1377,6 +1378,8 @@ static void hw_tsf_reset(_adapter *adapter)
 	tsf_rst_bit = port_cfg[hw_port].tsf_rst_bit;
 	rtw_write8(adapter, tsf_rst_addr, tsf_rst_bit);
 }
+#endif /* DBG_TSF_MONITOR */
+#ifdef CONFIG_CLIENT_PORT_CFG
 static void hw_set_ta(_adapter *adapter, u8 hw_port, u8 *val)
 {
 	u8 idx = 0;
@@ -1388,12 +1391,15 @@ static void hw_set_ta(_adapter *adapter, u8 hw_port, u8 *val)
 	RTW_INFO("%s("ADPT_FMT") hw port -%d TA: "MAC_FMT"\n",
 		__func__, ADPT_ARG(adapter), hw_port, MAC_ARG(val));
 }
+#endif /* CONFIG_CLIENT_PORT_CFG */
+#ifdef CONFIG_CLIENT_PORT_CFG
 static void hw_set_aid(_adapter *adapter, u8 hw_port, u8 aid)
 {
 	rtw_write16(adapter, port_cfg[hw_port].ps_aid, (0xF800 | aid));
 	RTW_INFO("%s("ADPT_FMT") hw port -%d AID: %d\n",
 			__func__, ADPT_ARG(adapter), hw_port, aid);
 }
+#endif /* CONFIG_CLIENT_PORT_CFG */
 #ifdef CONFIG_CLIENT_PORT_CFG
 void rtw_hw_client_port_cfg(_adapter *adapter)
 {

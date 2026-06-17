@@ -460,6 +460,7 @@ void halrf_iqk_dbg(void *dm_void)
 #endif
 }
 
+#if (RTL8822B_SUPPORT == 1 || RTL8821C_SUPPORT == 1)
 static void halrf_lck_dbg(struct dm_struct *dm)
 {
 	RF_DBG(dm, DBG_RF_IQK, "%-20s\n", "====== LCK Info ======");
@@ -471,6 +472,7 @@ static void halrf_lck_dbg(struct dm_struct *dm)
 	RF_DBG(dm, DBG_RF_IQK, "%-20s: %llu %s\n", "progressing_time",
 	       dm->rf_calibrate_info.lck_progressing_time, "(ms)");
 }
+#endif /* (RTL8822B_SUPPORT == 1 || RTL8821C_SUPPORT == 1) */
 void phydm_get_iqk_cfir(void *dm_void, u8 idx, u8 path, boolean debug)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
