@@ -120,7 +120,17 @@ jobs:
           scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
           # Reconcile and prepare for external module builds
           make olddefconfig
+          # modules_prepare sets up the external-module scaffolding (modpost, modfinal
+          # rules); without it the out-of-tree build dies at __modfinal ("No rule to
+          # make target '88x2cs.ko'"). vmlinux is then a PARTIAL build (no loadable =m
+          # modules, no bzImage; ~5 min vs ~10 for a full make) that emits
+          # vmlinux.symvers with every exported symbol. A complete Module.symvers is
+          # only written by 'make modules', which we don't need — the driver's deps are
+          # all =y, so vmlinux.symvers is complete for it. Copy it to Module.symvers so
+          # a leftover "undefined symbol" means a REAL link break, not a missing symvers.
           make modules_prepare
+          make -j"$(nproc)" vmlinux
+          cp vmlinux.symvers Module.symvers
           
       - name: Build module
         run: |
@@ -133,11 +143,13 @@ jobs:
           #   =return-type / ...), i.e. real API breakage like on linux-next.
           # -k (keep-going): compile every file even after an error, so the by-type
           #   tally below is COMPLETE (without it the build stops at the first file).
-          # KBUILD_MODPOST_WARN=1: expected undefined-symbol modpost notes stay warnings.
+          # No KBUILD_MODPOST_WARN: with Module.symvers in place (see Prepare) modpost
+          #   resolves the real exports, so a remaining "undefined symbol" is a genuine
+          #   link break (removed/renamed kernel API) and MUST fail the build.
           set -o pipefail
           rc=0
           make -k KSRC=/tmp/linux-${{ matrix.kernel_version }} \
-               KBUILD_MODPOST_WARN=1 2>&1 | tee "$LOG" || rc=$?
+               2>&1 | tee "$LOG" || rc=$?
 
           # Count diagnostics by type (gcc prints the class in brackets, e.g.
           # [-Werror=missing-prototypes]). Pure shell, no extra tooling.
@@ -152,8 +164,20 @@ jobs:
             | sed -E 's/^\[-W(error=)?//; s/\]$//' \
             | sort | uniq -c | sort -rn \
             | tee -a "$GITHUB_STEP_SUMMARY" || true
+          # Link/compile counts that the [-W...] tally above misses. objtool warnings
+          # (e.g. a missing __noreturn) are fatal under CONFIG_OBJTOOL_WERROR; modpost
+          # "undefined" now means a real unresolved kernel symbol; both also fail the
+          # build via rc — these lines just surface them in the summary.
           total=$(grep -c ': error:' "$LOG" || true)
-          echo "error: lines (hard compile errors): ${total:-0}" | tee -a "$GITHUB_STEP_SUMMARY"
+          objt=$(grep -c 'warning: objtool:' "$LOG" || true)
+          undef=$(grep -cE 'modpost:.*\bundefined\b' "$LOG" || true)
+          ld=$(grep -cE 'undefined reference to|: ld(\.[a-z]+)?: ' "$LOG" || true)
+          {
+            echo "error: lines (compile):    ${total:-0}"
+            echo "objtool warnings:          ${objt:-0}"
+            echo "modpost undefined symbols: ${undef:-0}"
+            echo "linker errors:             ${ld:-0}"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
           exit $rc
