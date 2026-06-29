@@ -13179,7 +13179,7 @@ ParseQualifiedString(
 		return _FALSE;
 
 	j = (*Start) - 2;
-	strncpy((char *)Out, (const char *)(In + i), j - i + 1);
+	rtw_bytes((char *)Out, (const char *)(In + i), j - i + 1);
 
 	return _TRUE;
 }
