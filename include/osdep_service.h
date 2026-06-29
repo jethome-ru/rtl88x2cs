@@ -822,4 +822,24 @@ int hexstr2bin(const char *hex, u8 *buf, size_t len);
 #error "NOT DEFINE \"rtw_sprintf\"!!"
 #endif /* !PLATFORM_LINUX */
 
+/*
+ * strncpy() was removed from the kernel in v7.2 (commit 079a028d6327,
+ * "string: Remove strncpy() from the kernel"). Provide intent-named wrappers:
+ * on >= 7.2 they map to the semantically-correct FORTIFY-friendly replacement;
+ * on <= 7.1 strncpy() is still present, so they expand to it unchanged
+ * (byte-identical behavior, zero risk on already-supported kernels).
+ */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0))
+/* C-string -> sized buffer: NUL-terminated AND tail-padded with NUL. Matches
+ * strncpy() for sources shorter than size (holds at every call site here). */
+#define rtw_strscpy_pad(dst, src, size)	strscpy_pad((dst), (src), (size))
+/* Copy exactly n raw bytes, no termination/padding: either n != sizeof(dst),
+ * or src is a non-NUL-terminated blob. Termination (when dst is later used as a
+ * C-string) is guaranteed by surrounding code / pre-zeroed buffers. */
+#define rtw_bytes(dst, src, n)		memcpy((dst), (src), (n))
+#else
+#define rtw_strscpy_pad(dst, src, size)	strncpy((dst), (src), (size))
+#define rtw_bytes(dst, src, n)		strncpy((dst), (src), (n))
+#endif
+
 #endif
