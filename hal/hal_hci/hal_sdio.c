@@ -26,7 +26,7 @@ const char *_sdio_tx_queue_str[] = {
 
 static void dump_mac_page0(PADAPTER padapter)
 {
-	char str_out[128];
+	char str_out[128] = {'\0'};
 	char str_val[8];
 	char *p = NULL;
 	int index = 0, i = 0;
@@ -35,15 +35,15 @@ static void dump_mac_page0(PADAPTER padapter)
 	RTW_ERR("Dump MAC Page0 register:\n");
 	for (index = 0 ; index < 0x100 ; index += 16) {
 		p = &str_out[0];
-		len = snprintf(str_val, sizeof(str_val),
+		len = scnprintf(str_val, sizeof(str_val),
 			       "0x%02x: ", index);
-		strncpy(str_out, str_val, len);
+		rtw_bytes(str_out, str_val, len);
 		p += len;
 
 		for (i = 0 ; i < 16 ; i++) {
-			len = snprintf(str_val, sizeof(str_val), "%02x ",
+			len = scnprintf(str_val, sizeof(str_val), "%02x ",
 				       rtw_read8(padapter, index + i));
-			strncpy(p, str_val, len);
+			rtw_bytes(p, str_val, len);
 			p += len;
 		}
 		RTW_INFO("%s\n", str_out);
