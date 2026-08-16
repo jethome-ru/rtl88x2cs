@@ -6389,6 +6389,11 @@ ssize_t proc_set_pathb_phase(struct file *file, const char __user *buffer, size_
 		return -EFAULT;
 	}
 
+	if (count >= sizeof(tmp)) {
+		rtw_warn_on(1);
+		return -EFAULT;
+	}
+
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
 		num = sscanf(tmp, "%u", &tmp_idx);
 		if ((tmp_idx < 0) || (tmp_idx > 11)) {
