@@ -1080,7 +1080,7 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
 #endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
-	struct cfg80211_roam_info roam_info ={};
+	struct cfg80211_roam_info *roam_info;
 #endif
 
 	RTW_INFO(FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(padapter));
@@ -1153,19 +1153,24 @@ check_bss:
 		#endif
 
 		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
-		#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 0, 0)
-		roam_info.channel = notify_channel;
-		roam_info.bssid = cur_network->network.MacAddress;
-		#else
-		roam_info.links[0].channel = notify_channel;
-		roam_info.links[0].bssid = cur_network->network.MacAddress;
-		#endif
-		roam_info.req_ie = pmlmepriv->assoc_req + sizeof(struct rtw_ieee80211_hdr_3addr) + 2;
-		roam_info.req_ie_len = pmlmepriv->assoc_req_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 2;
-		roam_info.resp_ie = pmlmepriv->assoc_rsp + sizeof(struct rtw_ieee80211_hdr_3addr) + 6;
-		roam_info.resp_ie_len = pmlmepriv->assoc_rsp_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 6;
+		roam_info = kzalloc(sizeof(*roam_info), GFP_ATOMIC);
+		if (roam_info) {
+			#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 0, 0)
+			roam_info->channel = notify_channel;
+			roam_info->bssid = cur_network->network.MacAddress;
+			#else
+			roam_info->links[0].channel = notify_channel;
+			roam_info->links[0].bssid = cur_network->network.MacAddress;
+			#endif
+			roam_info->req_ie = pmlmepriv->assoc_req + sizeof(struct rtw_ieee80211_hdr_3addr) + 2;
+			roam_info->req_ie_len = pmlmepriv->assoc_req_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 2;
+			roam_info->resp_ie = pmlmepriv->assoc_rsp + sizeof(struct rtw_ieee80211_hdr_3addr) + 6;
+			roam_info->resp_ie_len = pmlmepriv->assoc_rsp_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 6;
 
-		cfg80211_roamed(padapter->pnetdev, &roam_info, GFP_ATOMIC);
+			cfg80211_roamed(padapter->pnetdev, roam_info, GFP_ATOMIC);
+			kfree(roam_info);
+		} else
+			RTW_INFO(FUNC_ADPT_FMT" no memory for roam_info, roam not reported\n", FUNC_ADPT_ARG(padapter));
 		#else
 		cfg80211_roamed(padapter->pnetdev
 			#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
