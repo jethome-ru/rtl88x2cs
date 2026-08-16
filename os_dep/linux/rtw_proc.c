@@ -133,7 +133,7 @@ static ssize_t proc_set_log_level(struct file *file, const char __user *buffer, 
 	if (count < 1)
 		return -EINVAL;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -516,7 +516,7 @@ static ssize_t proc_set_sdio_dbg(struct file *file, const char __user *buffer,
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -644,7 +644,7 @@ ssize_t proc_set_led_config(struct file *file, const char __user *buffer, size_t
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -687,7 +687,7 @@ static ssize_t proc_set_aid_status(struct file *file, const char __user *buffer,
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -726,7 +726,7 @@ static ssize_t proc_set_ap_isolate(struct file *file, const char __user *buffer,
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -809,7 +809,7 @@ static ssize_t proc_set_backop_flags_sta(struct file *file, const char __user *b
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -849,7 +849,7 @@ static ssize_t proc_set_backop_flags_ap(struct file *file, const char __user *bu
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -890,7 +890,7 @@ static ssize_t proc_set_backop_flags_mesh(struct file *file, const char __user *
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -934,7 +934,7 @@ static ssize_t proc_set_config_gpio(struct file *file, const char __user *buffer
 	if (count < 2)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -960,7 +960,7 @@ static ssize_t proc_set_gpio_output_value(struct file *file, const char __user *
 	if (count < 2)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -999,7 +999,7 @@ static ssize_t proc_set_gpio(struct file *file, const char __user *buffer, size_
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1031,7 +1031,7 @@ static ssize_t proc_set_rx_info_msg(struct file *file, const char __user *buffer
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1159,7 +1159,7 @@ static ssize_t proc_set_linked_info_dump(struct file *file, const char __user *b
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1212,7 +1212,7 @@ static ssize_t proc_set_sta_tp_dump(struct file *file, const char __user *buffer
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1279,7 +1279,7 @@ static ssize_t proc_set_turboedca_ctrl(struct file *file, const char __user *buf
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp))
+	if (count >= sizeof(tmp))
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
@@ -1363,7 +1363,7 @@ static ssize_t proc_set_chan_plan(struct file *file, const char __user *buffer, 
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1404,7 +1404,7 @@ static ssize_t proc_set_country_code(struct file *file, const char __user *buffe
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1459,7 +1459,7 @@ static ssize_t proc_set_macaddr_acl(struct file *file, const char __user *buffer
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1594,7 +1594,7 @@ ssize_t proc_set_pre_link_sta(struct file *file, const char __user *buffer, size
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1672,7 +1672,7 @@ static ssize_t proc_set_ch_sel_policy(struct file *file, const char __user *buff
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1716,7 +1716,7 @@ static ssize_t proc_set_dfs_test_case(struct file *file, const char __user *buff
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1745,7 +1745,7 @@ static ssize_t proc_set_update_non_ocp(struct file *file, const char __user *buf
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1780,7 +1780,7 @@ static ssize_t proc_set_radar_detect(struct file *file, const char __user *buffe
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1822,7 +1822,7 @@ static ssize_t proc_set_dfs_ch_sel_d_flags(struct file *file, const char __user 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1864,7 +1864,7 @@ static ssize_t proc_set_dfs_slave_with_rd(struct file *file, const char __user *
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1912,7 +1912,7 @@ static ssize_t proc_set_rx_ampdu_size_limit(struct file *file, const char __user
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1960,7 +1960,7 @@ static ssize_t proc_set_rx_chk_limit(struct file *file, const char __user *buffe
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2000,7 +2000,7 @@ static ssize_t proc_set_udpport(struct file *file, const char __user *buffer, si
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2134,7 +2134,7 @@ static ssize_t proc_set_sec_cam(struct file *file, const char __user *buffer, si
 	char cmd[4];
 	u8 id_1 = 0, id_2 = 0;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2198,7 +2198,7 @@ static ssize_t proc_set_change_bss_chbw(struct file *file, const char __user *bu
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2250,7 +2250,7 @@ static ssize_t proc_set_tx_aclt_force_val(struct file *file, const char __user *
 	_adapter *adapter = rtw_netdev_priv(dev);
 	char tmp[32] = {0};
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2287,7 +2287,7 @@ static ssize_t proc_set_tx_aclt_flags(struct file *file, const char __user *buff
 	_adapter *adapter = rtw_netdev_priv(dev);
 	char tmp[32] = {0};
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2329,7 +2329,7 @@ static ssize_t proc_set_tx_aclt_confs(struct file *file, const char __user *buff
 	_adapter *adapter = rtw_netdev_priv(dev);
 	char tmp[32] = {0};
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2400,7 +2400,7 @@ static ssize_t proc_set_tx_bw_mode(struct file *file, const char __user *buffer,
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2493,7 +2493,7 @@ static ssize_t proc_set_tpc_settings(struct file *file, const char __user *buffe
 	u8 mode;
 	u16 m_constraint;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2537,7 +2537,7 @@ static ssize_t proc_set_tx_power_ext_info(struct file *file, const char __user *
 	char tmp[32] = {0};
 	char cmd[16] = {0};
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2638,7 +2638,7 @@ static ssize_t proc_set_tx_power_idx_dump(struct file *file, const char __user *
 
 	char tmp[32] = {0};
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2717,7 +2717,7 @@ static ssize_t proc_set_txpwr_total_dbm_dump(struct file *file, const char __use
 
 	char tmp[32] = {0};
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2758,7 +2758,7 @@ static ssize_t proc_set_kfree_flag(struct file *file, const char __user *buffer,
 	char tmp[32] = {0};
 	u8 flag;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2825,7 +2825,7 @@ static ssize_t proc_set_kfree_bb_gain(struct file *file, const char __user *buff
 	s8 bb_gain[BB_GAIN_NUM];
 	char ch_band_Group[6];
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2897,7 +2897,7 @@ static ssize_t proc_set_kfree_thermal(struct file *file, const char __user *buff
 	char tmp[32] = {0};
 	s8 thermal;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2927,7 +2927,7 @@ static ssize_t proc_set_tx_gain_offset(struct file *file, const char __user *buf
 	if (!adapter)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2957,7 +2957,7 @@ static ssize_t proc_set_btinfo_evt(struct file *file, const char __user *buffer,
 	if (count < 6)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3331,7 +3331,7 @@ static ssize_t proc_set_skip_band(struct file *file, const char __user *buffer, 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3391,7 +3391,7 @@ static ssize_t proc_set_acs(struct file *file, const char __user *buffer, size_t
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3446,7 +3446,7 @@ static ssize_t proc_set_nm(struct file *file, const char __user *buffer, size_t 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3528,7 +3528,7 @@ static ssize_t proc_set_rsvd_page_info(struct file *file, const char __user *buf
 	if (count < 2)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3565,7 +3565,7 @@ static ssize_t proc_set_fifo_info(struct file *file, const char __user *buffer, 
 	if (count < 3)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3661,7 +3661,7 @@ static ssize_t proc_set_napi_th(struct file *file, const char __user *buffer, si
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3698,7 +3698,7 @@ static ssize_t proc_set_dynamic_agg_enable(struct file *file, const char __user 
 	char tmp[32] = {0};
 	int enable = 0, i = 0;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3771,7 +3771,7 @@ static ssize_t proc_set_mesh_acnode_prevent(struct file *file, const char __user
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3816,7 +3816,7 @@ static ssize_t proc_set_mesh_offch_cand(struct file *file, const char __user *bu
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3861,7 +3861,7 @@ static ssize_t proc_set_mesh_peer_blacklist(struct file *file, const char __user
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3903,7 +3903,7 @@ static ssize_t proc_set_mesh_cto_mgate_require(struct file *file, const char __u
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3950,7 +3950,7 @@ static ssize_t proc_set_mesh_cto_mgate_blacklist(struct file *file, const char _
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4046,7 +4046,7 @@ static ssize_t proc_set_mesh_b2u_flags(struct file *file, const char __user *buf
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4098,7 +4098,7 @@ static ssize_t proc_set_mesh_gate_timeout(struct file *file, const char __user *
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4162,7 +4162,7 @@ proc_set_peer_alive_based_preq(struct file *file, const char __user *buffer,
 	int num = 0;
 	u8 enable = 0;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4213,7 +4213,7 @@ static ssize_t proc_set_scan_interval_thr(struct file *file,
 	u32 thr = 0;
 
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4259,7 +4259,7 @@ static ssize_t proc_set_scan_deny(struct file *file, const char __user *buffer,
 	int num = 0;
 	int enable = 0;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4377,7 +4377,7 @@ static ssize_t proc_set_tpt_mode(struct file *file, const char __user *buffer,
 
 #define MAX_TPT_MODE_NUM 4
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4442,7 +4442,7 @@ ssize_t proc_set_shift_rxagc(struct file *file, const char __user *buffer,
 	char tmp[32] = {0};
 	u8 op, val;
 
-	if ((count < 1) || (count > sizeof(tmp)))
+	if ((count < 1) || (count >= sizeof(tmp)))
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
@@ -4970,7 +4970,7 @@ ssize_t proc_set_odm_adaptivity(struct file *file, const char __user *buffer, si
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5033,7 +5033,7 @@ static ssize_t proc_set_phydm_cmd(struct file *file, const char __user *buffer, 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp))
+	if (count >= sizeof(tmp))
 		return -EFAULT;
 
 	if (buffer && !copy_from_user(tmp, buffer, count)) {
