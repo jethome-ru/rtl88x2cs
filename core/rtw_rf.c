@@ -787,19 +787,19 @@ const char *const _regd_str[] = {
 */
 void txpwr_idx_get_dbm_str(s8 idx, u8 txgi_max, u8 txgi_pdbm, SIZE_T cwidth, char dbm_str[], u8 dbm_str_len)
 {
-	char fmt[16];
+	char fmt[32];
 
 	if (idx == txgi_max) {
-		snprintf(fmt, 16, "%%%zus", cwidth >= 6 ? cwidth + 1 : 6);
+		snprintf(fmt, sizeof(fmt), "%%%zus", cwidth >= 6 ? cwidth + 1 : 6);
 		snprintf(dbm_str, dbm_str_len, fmt, "NA");
 	} else if (idx > -txgi_pdbm && idx < 0) { /* -0.xx */
-		snprintf(fmt, 16, "%%%zus-0.%%02d", cwidth >= 6 ? cwidth - 4 : 1);
+		snprintf(fmt, sizeof(fmt), "%%%zus-0.%%02d", cwidth >= 6 ? cwidth - 4 : 1);
 		snprintf(dbm_str, dbm_str_len, fmt, "", (rtw_abs(idx) % txgi_pdbm) * 100 / txgi_pdbm);
 	} else if (idx % txgi_pdbm) { /* d.xx */
-		snprintf(fmt, 16, "%%%zud.%%02d", cwidth >= 6 ? cwidth - 2 : 3);
+		snprintf(fmt, sizeof(fmt), "%%%zud.%%02d", cwidth >= 6 ? cwidth - 2 : 3);
 		snprintf(dbm_str, dbm_str_len, fmt, idx / txgi_pdbm, (rtw_abs(idx) % txgi_pdbm) * 100 / txgi_pdbm);
 	} else { /* d */
-		snprintf(fmt, 16, "%%%zud", cwidth >= 6 ? cwidth + 1 : 6);
+		snprintf(fmt, sizeof(fmt), "%%%zud", cwidth >= 6 ? cwidth + 1 : 6);
 		snprintf(dbm_str, dbm_str_len, fmt, idx / txgi_pdbm);
 	}
 }
@@ -810,19 +810,19 @@ void txpwr_idx_get_dbm_str(s8 idx, u8 txgi_max, u8 txgi_pdbm, SIZE_T cwidth, cha
 */
 void txpwr_mbm_get_dbm_str(s16 mbm, SIZE_T cwidth, char dbm_str[], u8 dbm_str_len)
 {
-	char fmt[16];
+	char fmt[32];
 
 	if (mbm == UNSPECIFIED_MBM) {
-		snprintf(fmt, 16, "%%%zus", cwidth >= 6 ? cwidth + 1 : 6);
+		snprintf(fmt, sizeof(fmt), "%%%zus", cwidth >= 6 ? cwidth + 1 : 6);
 		snprintf(dbm_str, dbm_str_len, fmt, "NA");
 	} else if (mbm > -MBM_PDBM && mbm < 0) { /* -0.xx */
-		snprintf(fmt, 16, "%%%zus-0.%%02d", cwidth >= 6 ? cwidth - 4 : 1);
+		snprintf(fmt, sizeof(fmt), "%%%zus-0.%%02d", cwidth >= 6 ? cwidth - 4 : 1);
 		snprintf(dbm_str, dbm_str_len, fmt, "", (rtw_abs(mbm) % MBM_PDBM) * 100 / MBM_PDBM);
 	} else if (mbm % MBM_PDBM) { /* d.xx */
-		snprintf(fmt, 16, "%%%zud.%%02d", cwidth >= 6 ? cwidth - 2 : 3);
+		snprintf(fmt, sizeof(fmt), "%%%zud.%%02d", cwidth >= 6 ? cwidth - 2 : 3);
 		snprintf(dbm_str, dbm_str_len, fmt, mbm / MBM_PDBM, (rtw_abs(mbm) % MBM_PDBM) * 100 / MBM_PDBM);
 	} else { /* d */
-		snprintf(fmt, 16, "%%%zud", cwidth >= 6 ? cwidth + 1 : 6);
+		snprintf(fmt, sizeof(fmt), "%%%zud", cwidth >= 6 ? cwidth + 1 : 6);
 		snprintf(dbm_str, dbm_str_len, fmt, mbm / MBM_PDBM);
 	}
 }
@@ -1013,7 +1013,7 @@ void dump_txpwr_lmt(void *sel, _adapter *adapter)
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
 	struct hal_spec_t *hal_spec = GET_HAL_SPEC(adapter);
 	_irqL irqL;
-	char fmt[16];
+	char fmt[32];
 	char tmp_str[TMP_STR_LEN];
 	s8 *lmt_idx = NULL;
 	int bw, band, ch_num, tlrs, ntx_idx, rs, i, path;
