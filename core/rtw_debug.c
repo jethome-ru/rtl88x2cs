@@ -917,14 +917,14 @@ ssize_t proc_set_defs_param(struct file *file, const char __user *buffer, size_t
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *mlme = &adapter->mlmepriv;
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 defs_lmt_sta;
 	u32 defs_lmt_time;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -948,7 +948,7 @@ ssize_t proc_set_write_reg(struct file *file, const char __user *buffer, size_t 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 addr, val, len;
 
 	if (count < 3) {
@@ -956,7 +956,7 @@ ssize_t proc_set_write_reg(struct file *file, const char __user *buffer, size_t 
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1024,7 +1024,7 @@ int proc_get_read_reg(struct seq_file *m, void *v)
 
 ssize_t proc_set_read_reg(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[16];
+	char tmp[16] = {0};
 	u32 addr, len;
 
 	if (count < 2) {
@@ -1032,7 +1032,7 @@ ssize_t proc_set_read_reg(struct file *file, const char __user *buffer, size_t c
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1250,13 +1250,13 @@ ssize_t proc_set_roam_flags(struct file *file, const char __user *buffer, size_t
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 flags;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1296,7 +1296,7 @@ ssize_t proc_set_roam_param(struct file *file, const char __user *buffer, size_t
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_priv *mlme = &adapter->mlmepriv;
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 rssi_diff_th;
 	u32 scanr_exp_ms;
 	u32 scan_int;
@@ -1305,7 +1305,7 @@ ssize_t proc_set_roam_param(struct file *file, const char __user *buffer, size_t
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1333,13 +1333,13 @@ ssize_t proc_set_roam_tgt_addr(struct file *file, const char __user *buffer, siz
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 addr[ETH_ALEN];
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1487,7 +1487,7 @@ ssize_t proc_set_scan_param(struct file *file, const char __user *buffer, size_t
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1559,7 +1559,7 @@ ssize_t proc_set_rson_data(struct file *file, const char __user *buffer, size_t 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1685,7 +1685,7 @@ ssize_t proc_set_survey_info(struct file *file, const char __user *buffer, size_
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -1905,7 +1905,7 @@ ssize_t proc_reset_trx_info(struct file *file, const char __user *buffer, size_t
 	char cmd[32] = {0};
 	u8 cnt = 0;
 
-	if (count > sizeof(cmd)) {
+	if (count >= sizeof(cmd)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2011,7 +2011,7 @@ ssize_t proc_set_rate_ctl(struct file *file, const char __user *buffer, size_t c
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 fix_rate = 0xFF;
 #ifdef 	CONFIG_PHDYM_FW_FIXRATE
 	u8 bw = 0;
@@ -2022,7 +2022,7 @@ ssize_t proc_set_rate_ctl(struct file *file, const char __user *buffer, size_t c
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2119,13 +2119,13 @@ ssize_t proc_set_bmc_tx_rate(struct file *file, const char __user *buffer, size_
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 bmc_tx_rate;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2157,13 +2157,13 @@ ssize_t proc_set_tx_power_offset(struct file *file, const char __user *buffer, s
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 power_offset = 0;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2202,13 +2202,13 @@ ssize_t proc_set_bw_ctl(struct file *file, const char __user *buffer, size_t cou
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 fix_bw;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2248,13 +2248,13 @@ ssize_t proc_set_rx_cnt_dump(struct file *file, const char __user *buffer, size_
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 dump_rx_cnt_mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2275,12 +2275,12 @@ ssize_t proc_set_rx_cnt_dump(struct file *file, const char __user *buffer, size_
 
 ssize_t proc_set_fwdl_test_case(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2293,12 +2293,12 @@ ssize_t proc_set_fwdl_test_case(struct file *file, const char __user *buffer, si
 
 ssize_t proc_set_del_rx_ampdu_test_case(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2311,12 +2311,12 @@ ssize_t proc_set_del_rx_ampdu_test_case(struct file *file, const char __user *bu
 
 ssize_t proc_set_wait_hiq_empty(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2329,12 +2329,12 @@ ssize_t proc_set_wait_hiq_empty(struct file *file, const char __user *buffer, si
 
 ssize_t proc_set_sta_linking_test(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2356,12 +2356,12 @@ ssize_t proc_set_sta_linking_test(struct file *file, const char __user *buffer, 
 #ifdef CONFIG_AP_MODE
 ssize_t proc_set_ap_linking_test(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2394,7 +2394,7 @@ ssize_t proc_set_zeroconf_tgt_macaddr(struct file *file, const char __user *buff
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	char macaddr[ETH_ALEN];
 	int i = 0;
 	u8 null_content[6] = {0};
@@ -2402,7 +2402,7 @@ ssize_t proc_set_zeroconf_tgt_macaddr(struct file *file, const char __user *buff
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2467,13 +2467,13 @@ ssize_t proc_set_ps_dbg_info(struct file *file, const char __user *buffer, size_
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct dvobj_priv *dvobj = adapter->dvobj;
 	struct debug_priv *pdbgpriv = &dvobj->drv_dbg;
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 ps_dbg_cmd_id;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2783,13 +2783,13 @@ ssize_t proc_set_hw_status(struct file *file, const char __user *buffer, size_t 
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct dvobj_priv *dvobj = padapter->dvobj;
 	struct registry_priv *regsty = dvobj_to_regsty(dvobj);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 enable;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -2927,13 +2927,13 @@ ssize_t proc_set_rx_signal(struct file *file, const char __user *buffer, size_t 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 is_signal_dbg, signal_strength;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3015,13 +3015,13 @@ ssize_t proc_set_ht_enable(struct file *file, const char __user *buffer, size_t 
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3057,7 +3057,7 @@ ssize_t proc_set_bw_mode(struct file *file, const char __user *buffer, size_t co
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 	u8 bw_2g;
 	u8 bw_5g;
@@ -3065,7 +3065,7 @@ ssize_t proc_set_bw_mode(struct file *file, const char __user *buffer, size_t co
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3103,13 +3103,13 @@ ssize_t proc_set_ampdu_enable(struct file *file, const char __user *buffer, size
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3177,14 +3177,14 @@ ssize_t proc_set_rx_ampdu(struct file *file, const char __user *buffer, size_t c
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 accept;
 	u8 size;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3221,13 +3221,13 @@ ssize_t proc_set_rx_ampdu_factor(struct file *file, const char __user *buffer
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 factor;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3266,13 +3266,13 @@ ssize_t proc_set_tx_max_agg_num(struct file *file, const char __user *buffer
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 agg_num;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3307,13 +3307,13 @@ ssize_t proc_set_rx_ampdu_density(struct file *file, const char __user *buffer, 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 density;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3351,13 +3351,13 @@ ssize_t proc_set_tx_ampdu_density(struct file *file, const char __user *buffer, 
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 density;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3396,13 +3396,13 @@ ssize_t proc_set_tx_quick_addba_req(struct file *file, const char __user *buffer
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 enable;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3443,13 +3443,13 @@ ssize_t proc_set_tx_amsdu(struct file *file, const char __user *buffer, size_t c
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 amsdu;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3493,13 +3493,13 @@ ssize_t proc_set_tx_amsdu_rate(struct file *file, const char __user *buffer, siz
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 amsdu_rate;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3530,7 +3530,7 @@ ssize_t proc_set_dyn_rrsr(struct file *file, const char __user *buffer, size_t c
 	if (count < 2)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3581,13 +3581,13 @@ ssize_t proc_set_en_fwps(struct file *file, const char __user *buffer, size_t co
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3738,13 +3738,13 @@ ssize_t proc_set_stbc_cap(struct file *file, const char __user *buffer, size_t c
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3778,13 +3778,13 @@ ssize_t proc_set_rx_stbc(struct file *file, const char __user *buffer, size_t co
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3819,13 +3819,13 @@ ssize_t proc_set_ldpc_cap(struct file *file, const char __user *buffer, size_t c
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3860,13 +3860,13 @@ ssize_t proc_set_txbf_cap(struct file *file, const char __user *buffer, size_t c
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 mode;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -3897,7 +3897,7 @@ ssize_t proc_set_txbf_cap(struct file *file, const char __user *buffer, size_t c
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 enable=0;
 
 	if (count < 1)
@@ -3906,7 +3906,7 @@ ssize_t proc_set_txbf_cap(struct file *file, const char __user *buffer, size_t c
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4150,12 +4150,12 @@ ssize_t proc_set_best_channel(struct file *file, const char __user *buffer, size
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct rf_ctl_t *rfctl = adapter_to_rfctl(padapter);
-	char tmp[32];
+	char tmp[32] = {0};
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4293,13 +4293,13 @@ ssize_t proc_set_rf4ce_state(struct file *file, const char __user *buffer, size_
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 state;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4345,13 +4345,13 @@ ssize_t proc_set_sreset(struct file *file, const char __user *buffer, size_t cou
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct sreset_priv *psrtpriv = &pHalData->srestpriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	s32 trigger_point;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4394,7 +4394,7 @@ ssize_t proc_set_pci_bridge_conf_space(struct file *file, const char __user *buf
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4468,7 +4468,7 @@ ssize_t proc_set_pci_conf_space(struct file *file, const char __user *buffer, si
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4790,14 +4790,14 @@ ssize_t proc_set_tx_ring_ext(struct file *file, const char __user *buffer, size_
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
 	struct dvobj_priv *pdvobjpriv = adapter_to_dvobj(padapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 reset = 0;
 	u32 dump = 0;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -4845,14 +4845,14 @@ ssize_t proc_set_wow_enable(struct file *file, const char __user *buffer,
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv *registry_pair = &padapter->registrypriv;
-	char tmp[8];
+	char tmp[8] = {0};
 	int num = 0;
 	int mode = 0;
 
 	if (count < 1) 
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5018,7 +5018,7 @@ ssize_t proc_set_wakeup_event(struct file *file, const char __user *buffer,
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5088,7 +5088,7 @@ ssize_t proc_set_wowlan_gpio_info(struct file *file, const char __user *buffer,
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5173,13 +5173,13 @@ int proc_get_new_bcn_max(struct seq_file *m, void *v)
 
 ssize_t proc_set_new_bcn_max(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 	extern int new_bcn_max;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5301,12 +5301,12 @@ ssize_t proc_set_ps_info(struct file *file, const char __user *buffer, size_t co
 {
 	struct net_device *dev = data;
 	struct _ADAPTER *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[8];
+	char tmp[8] = {0};
 	int num = 0;
 	int mode = 0;
 	int en = 0;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5409,14 +5409,14 @@ ssize_t proc_set_wmmps_info(struct file *file, const char __user *buffer, size_t
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 uapsd_ac_setting;
 	u8 uapsd_max_sp_len_setting;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5461,13 +5461,13 @@ ssize_t proc_set_tdls_enable(struct file *file, const char __user *buffer, size_
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	struct registry_priv	*pregpriv = &padapter->registrypriv;
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 en_tdls = 0;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5920,7 +5920,7 @@ int proc_get_monitor(struct seq_file *m, void *v)
 
 ssize_t proc_set_monitor(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data)
 {
-	char tmp[32];
+	char tmp[32] = {0};
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
 	u16 target_type;
@@ -5931,7 +5931,7 @@ ssize_t proc_set_monitor(struct file *file, const char __user *buffer, size_t co
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -5974,13 +5974,13 @@ ssize_t proc_set_xmit_block(struct file *file, const char __user *buffer, size_t
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u8 xb_mode, xb_reason;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -6089,7 +6089,7 @@ ssize_t proc_set_efuse_map(struct file *file, const char __user *buffer, size_t 
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -6126,7 +6126,7 @@ ssize_t proc_set_tx_sa_query(struct file *file, const char __user *buffer, size_
 	struct sta_info *psta;
 	_list	*plist, *phead;
 	_irqL	 irqL;
-	char tmp[16];
+	char tmp[16] = {0};
 	u8	mac_addr[NUM_STA][ETH_ALEN];
 	u32 key_type;
 	u8 index;
@@ -6204,7 +6204,7 @@ ssize_t proc_set_tx_deauth(struct file *file, const char __user *buffer, size_t 
 	struct sta_info *psta;
 	_list	*plist, *phead;
 	_irqL	 irqL;
-	char tmp[16];
+	char tmp[16] = {0};
 	u8	mac_addr[NUM_STA][ETH_ALEN];
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	u32 key_type;
@@ -6311,7 +6311,7 @@ ssize_t proc_set_tx_auth(struct file *file, const char __user *buffer, size_t co
 	struct sta_info *psta;
 	_list	*plist, *phead;
 	_irqL	 irqL;
-	char tmp[16];
+	char tmp[16] = {0};
 	u8	mac_addr[NUM_STA][ETH_ALEN];
 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 	u32 tx_auth;
@@ -6372,7 +6372,7 @@ ssize_t proc_set_pathb_phase(struct file *file, const char __user *buffer, size_
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	int num;
 	u32 tmp_idx;
 
@@ -6383,6 +6383,11 @@ ssize_t proc_set_pathb_phase(struct file *file, const char __user *buffer, size_
 
 	if (count < 1) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is 0!\n", FUNC_ADPT_ARG(padapter));
+		return -EFAULT;
+	}
+
+	if (count >= sizeof(tmp)) {
+		rtw_warn_on(1);
 		return -EFAULT;
 	}
 
@@ -6423,7 +6428,7 @@ ssize_t proc_set_mcc_enable(struct file *file, const char __user *buffer, size_t
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 en_mcc = 0;
 
 	if (NULL == buffer) {
@@ -6436,7 +6441,7 @@ ssize_t proc_set_mcc_enable(struct file *file, const char __user *buffer, size_t
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6470,7 +6475,7 @@ ssize_t proc_set_mcc_duration(struct file *file, const char __user *buffer, size
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 enable_runtime_duration = 0, mcc_duration = 0, type = 0;
 
 	if (NULL == buffer) {
@@ -6483,7 +6488,7 @@ ssize_t proc_set_mcc_duration(struct file *file, const char __user *buffer, size
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6526,7 +6531,7 @@ ssize_t proc_set_mcc_phydm_offload_enable(struct file *file, const char __user *
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_phydm_enable = 0;
 
 	if (NULL == buffer) {
@@ -6539,7 +6544,7 @@ ssize_t proc_set_mcc_phydm_offload_enable(struct file *file, const char __user *
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6567,7 +6572,7 @@ ssize_t proc_set_mcc_single_tx_criteria(struct file *file, const char __user *bu
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_single_tx_criteria = 0;
 
 	if (NULL == buffer) {
@@ -6580,7 +6585,7 @@ ssize_t proc_set_mcc_single_tx_criteria(struct file *file, const char __user *bu
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6617,7 +6622,7 @@ ssize_t proc_set_mcc_ap_bw20_target_tp(struct file *file, const char __user *buf
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_ap_bw20_target_tp = 0;
 
 	if (NULL == buffer) {
@@ -6630,7 +6635,7 @@ ssize_t proc_set_mcc_ap_bw20_target_tp(struct file *file, const char __user *buf
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6658,7 +6663,7 @@ ssize_t proc_set_mcc_ap_bw40_target_tp(struct file *file, const char __user *buf
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_ap_bw40_target_tp = 0;
 
 	if (NULL == buffer) {
@@ -6671,7 +6676,7 @@ ssize_t proc_set_mcc_ap_bw40_target_tp(struct file *file, const char __user *buf
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6699,7 +6704,7 @@ ssize_t proc_set_mcc_ap_bw80_target_tp(struct file *file, const char __user *buf
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_ap_bw80_target_tp = 0;
 
 	if (NULL == buffer) {
@@ -6712,7 +6717,7 @@ ssize_t proc_set_mcc_ap_bw80_target_tp(struct file *file, const char __user *buf
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6740,7 +6745,7 @@ ssize_t proc_set_mcc_sta_bw20_target_tp(struct file *file, const char __user *bu
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_sta_bw20_target_tp = 0;
 
 	if (NULL == buffer) {
@@ -6753,7 +6758,7 @@ ssize_t proc_set_mcc_sta_bw20_target_tp(struct file *file, const char __user *bu
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6781,7 +6786,7 @@ ssize_t proc_set_mcc_sta_bw40_target_tp(struct file *file, const char __user *bu
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_sta_bw40_target_tp = 0;
 
 	if (NULL == buffer) {
@@ -6794,7 +6799,7 @@ ssize_t proc_set_mcc_sta_bw40_target_tp(struct file *file, const char __user *bu
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6822,7 +6827,7 @@ ssize_t proc_set_mcc_sta_bw80_target_tp(struct file *file, const char __user *bu
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[255];
+	char tmp[255] = {0};
 	u32 mcc_sta_bw80_target_tp = 0;
 
 	if (NULL == buffer) {
@@ -6835,7 +6840,7 @@ ssize_t proc_set_mcc_sta_bw80_target_tp(struct file *file, const char __user *bu
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO(FUNC_ADPT_FMT ": input length is too large\n", FUNC_ADPT_ARG(padapter));
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6886,10 +6891,10 @@ ssize_t proc_set_ack_timeout(struct file *file, const char __user *buffer, size_
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 ack_timeout_ms, ack_timeout_ms_cck;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -6930,7 +6935,7 @@ ssize_t proc_set_fw_offload(struct file *file, const char __user *buffer, size_t
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	_adapter *pri_adapter = GET_PRIMARY_ADAPTER(adapter);
 	HAL_DATA_TYPE *hal = GET_HAL_DATA(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 iqk_offload_enable = 0, ch_switch_offload_enable = 0;
 
 	if (buffer == NULL) {
@@ -6943,7 +6948,7 @@ ssize_t proc_set_fw_offload(struct file *file, const char __user *buffer, size_t
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO("input length is too large\n");
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -6986,7 +6991,7 @@ ssize_t proc_set_fw_tbtt_rpt(struct file *file, const char __user *buffer, size_
 {
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 fw_tbtt_rpt, fw_bcn_offload;
 
 
@@ -7000,7 +7005,7 @@ ssize_t proc_set_fw_tbtt_rpt(struct file *file, const char __user *buffer, size_
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO("input length is too large\n");
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -7039,7 +7044,7 @@ ssize_t proc_set_txss_tp(struct file *file, const char __user *buffer, size_t co
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_ext_priv *pmlmeext = &(adapter->mlmeextpriv);
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 enable = 0;
 	u32 txss_tx_tp = 0;
 	int txss_chk_cnt = 0;
@@ -7054,7 +7059,7 @@ ssize_t proc_set_txss_tp(struct file *file, const char __user *buffer, size_t co
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO("input length is too large\n");
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -7103,7 +7108,7 @@ ssize_t proc_set_txss_ctrl(struct file *file, const char __user *buffer, size_t 
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_ext_priv *pmlmeext = &(adapter->mlmeextpriv);
 
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 tx_1ss = 0;
 
 	if (buffer == NULL) {
@@ -7116,7 +7121,7 @@ ssize_t proc_set_txss_ctrl(struct file *file, const char __user *buffer, size_t 
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO("input length is too large\n");
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -7166,13 +7171,13 @@ ssize_t proc_set_iqk(struct file *file, const char __user *buffer, size_t count,
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 recovery, clear, segment;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -7205,13 +7210,13 @@ ssize_t proc_set_lck(struct file *file, const char __user *buffer, size_t count,
 {
 	struct net_device *dev = data;
 	_adapter *padapter = (_adapter *)rtw_netdev_priv(dev);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 trigger;
 
 	if (count < 1)
 		return -EFAULT;
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		rtw_warn_on(1);
 		return -EFAULT;
 	}
@@ -7238,7 +7243,7 @@ ssize_t proc_set_lps_chk_tp(struct file *file, const char __user *buffer, size_t
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(adapter);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 enable = 0;
 	u32 lps_tx_tp = 0, lps_rx_tp = 0, lps_bi_tp = 0;
 	int lps_chk_cnt_th = 0;
@@ -7254,7 +7259,7 @@ ssize_t proc_set_lps_chk_tp(struct file *file, const char __user *buffer, size_t
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO("input length is too large\n");
 		rtw_warn_on(1);
 		return -EFAULT;
@@ -7323,7 +7328,7 @@ ssize_t proc_set_smps(struct file *file, const char __user *buffer, size_t count
 	struct net_device *dev = data;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(dev);
 	struct mlme_ext_priv *pmlmeext = &(adapter->mlmeextpriv);
-	char tmp[32];
+	char tmp[32] = {0};
 	u32 enable = 0;
 	u32 smps_en, smps_tx_tp = 0, smps_rx_tp = 0;
 	u32 smps_test = 0, smps_test_en = 0;
@@ -7338,7 +7343,7 @@ ssize_t proc_set_smps(struct file *file, const char __user *buffer, size_t count
 		return -EFAULT;
 	}
 
-	if (count > sizeof(tmp)) {
+	if (count >= sizeof(tmp)) {
 		RTW_INFO("input length is too large\n");
 		rtw_warn_on(1);
 		return -EFAULT;

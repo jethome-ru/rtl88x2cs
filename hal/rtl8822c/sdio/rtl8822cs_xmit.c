@@ -492,7 +492,7 @@ thread_return rtl8822cs_xmit_thread(thread_context context)
 	s32 ret;
 	PADAPTER adapter;
 	struct xmit_priv *pxmitpriv;
-	u8 thread_name[20] = {0};
+	u8 thread_name[32] = {0};
 #ifdef RTW_XMIT_THREAD_HIGH_PRIORITY_AGG
 #ifdef PLATFORM_LINUX
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 9, 1))
@@ -509,7 +509,7 @@ thread_return rtl8822cs_xmit_thread(thread_context context)
 	adapter = (PADAPTER)context;
 	pxmitpriv = &adapter->xmitpriv;
 
-	rtw_sprintf(thread_name, 20, "RTWHALXT-"ADPT_FMT, ADPT_ARG(adapter));
+	rtw_sprintf(thread_name, sizeof(thread_name), "RTWHALXT-"ADPT_FMT, ADPT_ARG(adapter));
 	thread_enter(thread_name);
 
 	RTW_INFO("start "FUNC_ADPT_FMT"\n", FUNC_ADPT_ARG(adapter));
