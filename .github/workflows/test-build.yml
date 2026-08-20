@@ -11,7 +11,7 @@ on:
 
 jobs:
   get-kernel-versions:
-    runs-on: [self-hosted, X64]
+    runs-on: [self-hosted, ubuntu-latest]
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -53,7 +53,7 @@ jobs:
 
   build:
     needs: get-kernel-versions
-    runs-on: [self-hosted, X64]
+    runs-on: [self-hosted, ubuntu-latest]
     strategy:
       matrix: ${{ fromJson(needs.get-kernel-versions.outputs.matrix) }}
       fail-fast: false
