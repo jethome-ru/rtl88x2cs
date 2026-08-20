@@ -23,28 +23,54 @@ jobs:
           
           # Parse JSON and extract versions
           versions=$(python3 << 'EOF'
-          import json
-          
+          import json, re
+
           with open('/tmp/releases.json', 'r') as f:
               data = json.load(f)
-          
-          versions = []
-          for release in data.get('releases', []):
-              version = release.get('version', '')
-              if not version:
-                  continue
-              # linux-next versions look like "next-YYYYMMDD": the git tag is the
-              # version verbatim (no "v" prefix) and lives in the linux-next tree.
-              # Numbered releases (6.12.93, 7.1, 7.2-rc1, ...) use a "v" prefix.
-              if version.startswith('next-'):
-                  tag = version
-              else:
-                  tag = 'v' + version
-              versions.append(tag)
-          
-          # Create matrix JSON
-          matrix = {'kernel_version': versions, 'toolchain': ['gcc', 'llvm']}
-          print(json.dumps(matrix))
+
+          releases = [r for r in data.get('releases', []) if r.get('version')]
+
+          # linux-next versions look like "next-YYYYMMDD": the git tag is the
+          # version verbatim (no "v" prefix) and lives in the linux-next tree.
+          # Numbered releases (6.12.93, 7.2, 7.3-rc1, ...) use a "v" prefix.
+          def tag(version):
+              return version if version.startswith('next-') else 'v' + version
+
+          def vkey(version):
+              return [int(x) for x in re.split(r'[.-]', version) if x.isdigit()]
+
+          # Tiered matrix. The newest longterm, the newest stable and linux-next
+          # build the full toolchain/arch square; every other maintained line
+          # (older LTS, mainline rc) keeps the single gcc/x86_64 cell it builds
+          # today — its job is catching kernel API breakage, and one toolchain
+          # covers that.
+          FULL = [('gcc', 'x86_64'), ('gcc', 'arm64'),
+                  ('llvm', 'x86_64'), ('llvm', 'arm64')]
+          SHORT = [('gcc', 'x86_64')]
+
+          full_versions = set()
+          for moniker in ('stable', 'longterm'):
+              lines = [r['version'] for r in releases if r.get('moniker') == moniker]
+              if lines:
+                  full_versions.add(max(lines, key=vkey))
+          full_versions.update(
+              r['version'] for r in releases if r.get('moniker') == 'linux-next')
+          # A freshly released mainline (no -rc suffix) IS the newest release for
+          # the window before its first stable point release spins up the
+          # 'stable' moniker; give it the full square too. Once mainline moves
+          # on to the next -rc it drops back to the short tier automatically.
+          full_versions.update(
+              r['version'] for r in releases
+              if r.get('moniker') == 'mainline' and '-rc' not in r['version'])
+
+          include = []
+          for r in releases:
+              combos = FULL if r['version'] in full_versions else SHORT
+              for tc, arch in combos:
+                  include.append({'kernel_version': tag(r['version']),
+                                  'toolchain': tc, 'arch': arch})
+
+          print(json.dumps({'include': include}))
           EOF
           )
           
@@ -59,12 +85,12 @@ jobs:
       fail-fast: false
 
     env:
-      # gcc cells keep today's native x86_64 build. llvm cells cross-compile for
-      # arm64 — the arch the driver actually ships on (JetHub) — which clang does
-      # natively, no cross-gcc toolchain needed; they double as the matrix's only
-      # arm64 coverage. TC is splatted into every make call ('' for gcc).
-      ARCH: ${{ matrix.toolchain == 'llvm' && 'arm64' || 'x86_64' }}
+      # ARCH and the toolchain come straight from the matrix cell. LLVM=1 makes
+      # clang a native cross-compiler; gcc needs the aarch64 cross toolchain for
+      # its arm64 cells. TC is splatted into every make call ('' for gcc).
+      ARCH: ${{ matrix.arch }}
       TC: ${{ matrix.toolchain == 'llvm' && 'LLVM=1' || '' }}
+      CROSS_COMPILE: ${{ matrix.toolchain == 'gcc' && matrix.arch == 'arm64' && 'aarch64-linux-gnu-' || '' }}
 
     steps:
       - name: Checkout code
@@ -88,17 +114,21 @@ jobs:
             file \
             clang \
             lld \
-            llvm
+            llvm \
+            gcc-aarch64-linux-gnu
       
       - name: Setup kernel source
         run: |
-          echo "Setting up kernel source for ${{ matrix.kernel_version }} / ${{ matrix.toolchain }}"
+          echo "Setting up kernel source for ${{ matrix.kernel_version }} / ${{ matrix.toolchain }}/${{ matrix.arch }}"
           TAG="${{ matrix.kernel_version }}"
-          # One tree per toolchain: the .config differs (CC_IS_CLANG, arm64), and
-          # sharing a tree would force a full reconfigure+rebuild every time the
-          # toolchains alternate on a cached runner.
+          # One tree per toolchain/arch combo: the .config differs (CC_IS_CLANG,
+          # target arch), and sharing a tree would force a full reconfigure and
+          # rebuild every time the combos alternate on a cached runner. The
+          # gcc/x86_64 tree keeps the historical unsuffixed path (warm cache).
           DEST="/tmp/linux-$TAG"
-          if [ "${{ matrix.toolchain }}" = "llvm" ]; then DEST="$DEST-llvm"; fi
+          if [ "${{ matrix.toolchain }}-${{ matrix.arch }}" != "gcc-x86_64" ]; then
+            DEST="$DEST-${{ matrix.toolchain }}-${{ matrix.arch }}"
+          fi
           echo "KTREE=$DEST" >> "$GITHUB_ENV"
           # Clone the Linux kernel at the given tag. linux-next tags (next-YYYYMMDD)
           # live in the linux-next tree; everything else is a stable/mainline tag.
@@ -118,13 +148,6 @@ jobs:
         run: |
           cd "$KTREE"
           # Use the arch default config, NOT the runner's distro /boot/config.
-          # gcc/x86_64 cells: x86_64_defconfig sets CONFIG_WERROR=y — the same
-          # condition the Buildroot x86 autobuilder hits — so the module build
-          # inherits a real -Werror and the CI actually gates on the driver's
-          # warnings. llvm/arm64 cells: the arm64 defconfig does NOT set WERROR,
-          # so clang-only warning classes are informational for now (counted in
-          # the summary below); the build still fails on the default-fatal
-          # diagnostics. Enable WERROR here too once the clang classes reach 0.
           make $TC defconfig
           # Enable the kernel options the rtl8822cs module needs so the out-of-tree
           # build sees complete headers (mirrors Buildroot rtl8822cs.mk CONFIG fixups).
@@ -138,6 +161,18 @@ jobs:
           scripts/config --disable SYSTEM_REVOCATION_KEYS
           scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
           scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
+          # -Werror gate, set explicitly so it does not depend on which arch
+          # defconfig happens to carry CONFIG_WERROR (x86_64 does, arm64 does
+          # not). gcc cells gate on the driver's warnings — the same condition
+          # the Buildroot x86 autobuilder hits — and their classes are at zero.
+          # llvm cells stay informational until the clang-only classes reach
+          # zero too (counted in the summary; only the kernel's default-fatal
+          # diagnostics fail the build) — then enable WERROR here as well.
+          if [ "${{ matrix.toolchain }}" = "gcc" ]; then
+            scripts/config --enable WERROR
+          else
+            scripts/config --disable WERROR
+          fi
           # Reconcile and prepare for external module builds
           make $TC olddefconfig
           # modules_prepare sets up the external-module scaffolding (modpost, modfinal
@@ -154,8 +189,8 @@ jobs:
           
       - name: Build module
         run: |
-          echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }} / ${{ matrix.toolchain }}"
-          LOG="/tmp/build-${{ matrix.kernel_version }}-${{ matrix.toolchain }}.log"
+          echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }} / ${{ matrix.toolchain }}/${{ matrix.arch }}"
+          LOG="/tmp/build-${{ matrix.kernel_version }}-${{ matrix.toolchain }}-${{ matrix.arch }}.log"
           # We do NOT force -Werror: our own warnings (missing-prototypes, unused-
           #   function, ...) are informational and only counted in the summary below.
           #   The build still fails on the kernel's own default-fatal diagnostics
@@ -178,7 +213,7 @@ jobs:
           # build. '|| true' on the whole pipeline keeps clean == green. (It must be on
           # the pipeline tail: '{ grep || true; } | ...' does NOT work — pipefail still
           # surfaces grep's 1 from inside the group.)
-          echo "### ${{ matrix.kernel_version }} / ${{ matrix.toolchain }} — diagnostics by type" >> "$GITHUB_STEP_SUMMARY"
+          echo "### ${{ matrix.kernel_version }} / ${{ matrix.toolchain }}/${{ matrix.arch }} — diagnostics by type" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           grep -hoE '\[-W[A-Za-z0-9=_+-]+\]' "$LOG" \
             | sed -E 's/^\[-W(error=)?//; s/\]$//' \
