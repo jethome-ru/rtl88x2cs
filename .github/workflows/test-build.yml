@@ -156,6 +156,12 @@ jobs:
           scripts/config --enable CFG80211
           scripts/config --enable MAC80211
           scripts/config --enable MMC
+          # The arm64 defconfig carries RFKILL=m; in Kconfig tristate arithmetic
+          # CFG80211's dependency "RFKILL || !RFKILL" then evaluates to m, which
+          # caps CFG80211/MAC80211 back to =m on olddefconfig — and =m exports
+          # never reach vmlinux.symvers, so modpost fails the module link with
+          # "cfg80211_* undefined". Force it built-in.
+          scripts/config --enable RFKILL
           # Disable certificate-related options that require distro-specific files
           scripts/config --disable SYSTEM_TRUSTED_KEYS
           scripts/config --disable SYSTEM_REVOCATION_KEYS
