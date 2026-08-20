@@ -43,7 +43,7 @@ jobs:
               versions.append(tag)
           
           # Create matrix JSON
-          matrix = {'kernel_version': versions}
+          matrix = {'kernel_version': versions, 'toolchain': ['gcc', 'llvm']}
           print(json.dumps(matrix))
           EOF
           )
@@ -57,7 +57,15 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.get-kernel-versions.outputs.matrix) }}
       fail-fast: false
-    
+
+    env:
+      # gcc cells keep today's native x86_64 build. llvm cells cross-compile for
+      # arm64 — the arch the driver actually ships on (JetHub) — which clang does
+      # natively, no cross-gcc toolchain needed; they double as the matrix's only
+      # arm64 coverage. TC is splatted into every make call ('' for gcc).
+      ARCH: ${{ matrix.toolchain == 'llvm' && 'arm64' || 'x86_64' }}
+      TC: ${{ matrix.toolchain == 'llvm' && 'LLVM=1' || '' }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -77,13 +85,21 @@ jobs:
             cpio \
             dwarves \
             git \
-            file
+            file \
+            clang \
+            lld \
+            llvm
       
       - name: Setup kernel source
         run: |
-          echo "Setting up kernel source for version ${{ matrix.kernel_version }}"
+          echo "Setting up kernel source for ${{ matrix.kernel_version }} / ${{ matrix.toolchain }}"
           TAG="${{ matrix.kernel_version }}"
+          # One tree per toolchain: the .config differs (CC_IS_CLANG, arm64), and
+          # sharing a tree would force a full reconfigure+rebuild every time the
+          # toolchains alternate on a cached runner.
           DEST="/tmp/linux-$TAG"
+          if [ "${{ matrix.toolchain }}" = "llvm" ]; then DEST="$DEST-llvm"; fi
+          echo "KTREE=$DEST" >> "$GITHUB_ENV"
           # Clone the Linux kernel at the given tag. linux-next tags (next-YYYYMMDD)
           # live in the linux-next tree; everything else is a stable/mainline tag.
           if [ ! -d "$DEST" ]; then
@@ -100,12 +116,16 @@ jobs:
           
       - name: Prepare kernel build environment
         run: |
-          cd /tmp/linux-${{ matrix.kernel_version }}
-          # Use the arch default config (x86_64_defconfig on the x64 runner), NOT the
-          # runner's distro /boot/config. The arch defconfig sets CONFIG_WERROR=y — the
-          # same condition the Buildroot x86 autobuilder hits — so the module build
-          # inherits a real -Werror and the CI actually gates on the driver's warnings.
-          make defconfig
+          cd "$KTREE"
+          # Use the arch default config, NOT the runner's distro /boot/config.
+          # gcc/x86_64 cells: x86_64_defconfig sets CONFIG_WERROR=y — the same
+          # condition the Buildroot x86 autobuilder hits — so the module build
+          # inherits a real -Werror and the CI actually gates on the driver's
+          # warnings. llvm/arm64 cells: the arm64 defconfig does NOT set WERROR,
+          # so clang-only warning classes are informational for now (counted in
+          # the summary below); the build still fails on the default-fatal
+          # diagnostics. Enable WERROR here too once the clang classes reach 0.
+          make $TC defconfig
           # Enable the kernel options the rtl8822cs module needs so the out-of-tree
           # build sees complete headers (mirrors Buildroot rtl8822cs.mk CONFIG fixups).
           scripts/config --enable NET
@@ -119,7 +139,7 @@ jobs:
           scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
           scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
           # Reconcile and prepare for external module builds
-          make olddefconfig
+          make $TC olddefconfig
           # modules_prepare sets up the external-module scaffolding (modpost, modfinal
           # rules); without it the out-of-tree build dies at __modfinal ("No rule to
           # make target '88x2cs.ko'"). vmlinux is then a PARTIAL build (no loadable =m
@@ -128,14 +148,14 @@ jobs:
           # only written by 'make modules', which we don't need — the driver's deps are
           # all =y, so vmlinux.symvers is complete for it. Copy it to Module.symvers so
           # a leftover "undefined symbol" means a REAL link break, not a missing symvers.
-          make modules_prepare
-          make -j"$(nproc)" vmlinux
+          make $TC modules_prepare
+          make -j"$(nproc)" $TC vmlinux
           cp vmlinux.symvers Module.symvers
           
       - name: Build module
         run: |
-          echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }}"
-          LOG="/tmp/build-${{ matrix.kernel_version }}.log"
+          echo "Building rtl88x2cs module for kernel ${{ matrix.kernel_version }} / ${{ matrix.toolchain }}"
+          LOG="/tmp/build-${{ matrix.kernel_version }}-${{ matrix.toolchain }}.log"
           # We do NOT force -Werror: our own warnings (missing-prototypes, unused-
           #   function, ...) are informational and only counted in the summary below.
           #   The build still fails on the kernel's own default-fatal diagnostics
@@ -148,7 +168,7 @@ jobs:
           #   link break (removed/renamed kernel API) and MUST fail the build.
           set -o pipefail
           rc=0
-          make -k KSRC=/tmp/linux-${{ matrix.kernel_version }} \
+          make -k $TC KSRC="$KTREE" \
                2>&1 | tee "$LOG" || rc=$?
 
           # Count diagnostics by type (gcc prints the class in brackets, e.g.
@@ -158,7 +178,7 @@ jobs:
           # build. '|| true' on the whole pipeline keeps clean == green. (It must be on
           # the pipeline tail: '{ grep || true; } | ...' does NOT work — pipefail still
           # surfaces grep's 1 from inside the group.)
-          echo "### ${{ matrix.kernel_version }} — diagnostics by type" >> "$GITHUB_STEP_SUMMARY"
+          echo "### ${{ matrix.kernel_version }} / ${{ matrix.toolchain }} — diagnostics by type" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           grep -hoE '\[-W[A-Za-z0-9=_+-]+\]' "$LOG" \
             | sed -E 's/^\[-W(error=)?//; s/\]$//' \
@@ -181,8 +201,6 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
           exit $rc
-        env:
-          ARCH: x86_64
       
       - name: Check build artifacts
         run: |
