@@ -48,6 +48,10 @@ jobs:
                   ('llvm', 'x86_64'), ('llvm', 'arm64')]
           SHORT = [('gcc', 'x86_64')]
 
+          # Each cell builds natively on a runner of its target arch.
+          RUNNER = {'x86_64': ['self-hosted', 'ubuntu-latest'],
+                    'arm64': ['self-hosted', 'ubuntu-latest-arm']}
+
           full_versions = set()
           for moniker in ('stable', 'longterm'):
               lines = [r['version'] for r in releases if r.get('moniker') == moniker]
@@ -68,7 +72,8 @@ jobs:
               combos = FULL if r['version'] in full_versions else SHORT
               for tc, arch in combos:
                   include.append({'kernel_version': tag(r['version']),
-                                  'toolchain': tc, 'arch': arch})
+                                  'toolchain': tc, 'arch': arch,
+                                  'runner': RUNNER[arch]})
 
           print(json.dumps({'include': include}))
           EOF
@@ -79,18 +84,18 @@ jobs:
 
   build:
     needs: get-kernel-versions
-    runs-on: [self-hosted, ubuntu-latest]
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix: ${{ fromJson(needs.get-kernel-versions.outputs.matrix) }}
       fail-fast: false
 
     env:
-      # ARCH and the toolchain come straight from the matrix cell. LLVM=1 makes
-      # clang a native cross-compiler; gcc needs the aarch64 cross toolchain for
-      # its arm64 cells. TC is splatted into every make call ('' for gcc).
+      # Builds are native: the runner's arch matches the cell's (see RUNNER in
+      # the matrix step). ARCH is still set explicitly — the driver's Makefile
+      # otherwise derives it from 'uname -m', which yields "aarch64" where
+      # kbuild expects "arm64". TC is splatted into every make call ('' for gcc).
       ARCH: ${{ matrix.arch }}
       TC: ${{ matrix.toolchain == 'llvm' && 'LLVM=1' || '' }}
-      CROSS_COMPILE: ${{ matrix.toolchain == 'gcc' && matrix.arch == 'arm64' && 'aarch64-linux-gnu-' || '' }}
 
     steps:
       - name: Checkout code
@@ -114,8 +119,7 @@ jobs:
             file \
             clang \
             lld \
-            llvm \
-            gcc-aarch64-linux-gnu
+            llvm
       
       - name: Setup kernel source
         run: |
