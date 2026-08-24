@@ -1091,6 +1091,10 @@ inline void rtw_regsty_init_rx_ampdu_sz_limit(struct registry_priv *regsty)
 			sz_limit = rtw_rx_ampdu_sz_limit_3ss;
 		else if (i == 3)
 			sz_limit = rtw_rx_ampdu_sz_limit_4ss;
+		else {
+			rtw_warn_on(1);
+			continue;
+		}
 
 		for (j = 0; j < 4; j++)
 			regsty->rx_ampdu_sz_limit_by_nss_bw[i][j] = sz_limit[j];
