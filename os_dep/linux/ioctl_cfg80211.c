@@ -7291,7 +7291,15 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 8, 0))
 	enum nl80211_channel_type channel_type,
 #endif
-	unsigned int duration, u64 *cookie
+	unsigned int duration,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0))
+	/* commit 914781c72813 ("wifi: cfg80211: convert cookie output to
+	 * input parameter"): cfg80211 pre-assigns the cookie and passes it
+	 * by value (7.3+); the driver must report this same value back. */
+	u64 cookie_in
+#else
+	u64 *cookie
+#endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0))
 	/* commit 4dbd1829045e ("wifi: cfg80211: Add MAC address filter to
 	 * remain_on_channel") added a trailing MAC filter (7.2+). We don't
@@ -7301,6 +7309,9 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 	)
 {
 	s32 err = 0;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0))
+	u64 *cookie = &cookie_in;
+#endif
 	u8 remain_ch = (u8) ieee80211_frequency_to_channel(channel->center_freq);
 	_adapter *padapter = NULL;
 	struct rtw_wdev_priv *pwdev_priv;
@@ -7340,7 +7351,9 @@ static s32 cfg80211_rtw_remain_on_channel(struct wiphy *wiphy,
 	is_p2p_find = (duration < (pwdinfo->ext_listen_interval)) ? _TRUE : _FALSE;
 #endif
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(7, 3, 0))
 	*cookie = ATOMIC_INC_RETURN(&pcfg80211_wdinfo->ro_ch_cookie_gen);
+#endif
 
 	RTW_INFO(FUNC_ADPT_FMT"%s ch:%u duration:%d, cookie:0x%llx\n"
 		, FUNC_ADPT_ARG(padapter), wdev == wiphy_to_pd_wdev(wiphy) ? " PD" : ""
@@ -7880,8 +7893,15 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
 #else
 	struct cfg80211_mgmt_tx_params *params,
 #endif
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0))
+	u64 cookie_in)
+#else
 	u64 *cookie)
+#endif
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0))
+	u64 *cookie = &cookie_in;
+#endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)) || defined(COMPAT_KERNEL_RELEASE)
 	struct ieee80211_channel *chan = params->chan;
 	const u8 *buf = params->buf;
@@ -7956,8 +7976,10 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
 	dvobj = adapter_to_dvobj(padapter);
 	pwdev_priv = adapter_wdev_data(padapter);
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(7, 3, 0))
 	/* cookie generation */
 	*cookie = pwdev_priv->mgmt_tx_cookie++;
+#endif
 
 #ifdef CONFIG_DEBUG_CFG80211
 	RTW_INFO(FUNC_ADPT_FMT"%s len=%zu, ch=%d"
